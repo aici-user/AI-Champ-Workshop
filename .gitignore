@@ -1,0 +1,7 @@
+# Large video files — host separately (YouTube / Google Drive)
+*.mp4
+*.mov
+*.avi
+
+# Claude project instructions
+CLAUDE.md

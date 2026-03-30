@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Champ — EduTech AI Workshops, Certifications & Mentoring</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          red:    { DEFAULT: '#D20E07', dark: '#a80b05', light: '#ff1a11' },
+          blue:   { DEFAULT: '#2D05E2', dark: '#2004b5', light: '#4a25f5' },
+          silver: { DEFAULT: '#BBBBBB' },
+          dark:   { DEFAULT: '#0d0d0d', 1: '#111111', 2: '#161616', 3: '#1e1e1e', 4: '#282828' },
+        },
+        fontFamily: {
+          heading: ['Montserrat', 'sans-serif'],
+          body:    ['Open Sans', 'sans-serif'],
+        },
+        letterSpacing: {
+          tight2: '-0.03em',
+        }
+      }
+    }
+  }
+</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Open Sans', sans-serif;
+    background: #0d0d0d;
+    color: #BBBBBB;
+    overflow-x: hidden;
+  }
+
+  /* ── Noise overlay ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: .025;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  }
+
+  /* ── Scroll reveal ── */
+  .sr        { opacity: 0; transform: translateY(36px);  transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
+  .sr-left   { opacity: 0; transform: translateX(-52px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
+  .sr-right  { opacity: 0; transform: translateX(52px);  transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
+  .sr-scale  { opacity: 0; transform: scale(.88);        transition: opacity .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.16,1,.3,1); }
+  .sr.in, .sr-left.in, .sr-right.in, .sr-scale.in { opacity: 1; transform: none; }
+  .d1 { transition-delay: .10s; }
+  .d2 { transition-delay: .20s; }
+  .d3 { transition-delay: .30s; }
+  .d4 { transition-delay: .45s; }
+  .d5 { transition-delay: .60s; }
+
+  /* ── Animated gradient text ── */
+  @keyframes grad-shift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  .grad-text {
+    background: linear-gradient(135deg, #fff 0%, #D20E07 40%, #2D05E2 80%, #fff 100%);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: grad-shift 5s linear infinite;
+  }
+
+  /* ── Floating orbs ── */
+  @keyframes orb {
+    0%,100% { transform: translate(0,0) scale(1); }
+    33%  { transform: translate(28px,-18px) scale(1.08); }
+    66%  { transform: translate(-18px,14px) scale(.94); }
+  }
+  .orb { animation: orb var(--dur,8s) ease-in-out infinite; }
+
+  /* ── Card hover ── */
+  .card {
+    transition: transform .4s cubic-bezier(.16,1,.3,1), box-shadow .4s ease;
+  }
+  .card:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 24px 64px rgba(210,14,7,.18), 0 8px 24px rgba(0,0,0,.55);
+  }
+
+  /* ── Border glow pulse ── */
+  @keyframes border-pulse {
+    0%,100% { border-color: rgba(210,14,7,.35); box-shadow: 0 0 12px rgba(210,14,7,.12); }
+    50%      { border-color: rgba(45,5,226,.35); box-shadow: 0 0 12px rgba(45,5,226,.12); }
+  }
+  .glow-border {
+    border: 1px solid rgba(210,14,7,.3);
+    animation: border-pulse 3.5s ease-in-out infinite;
+  }
+
+  /* ── Nav section highlight flash ── */
+  @keyframes nav-highlight {
+    0%   { box-shadow: inset 0 0 0px 0px rgba(210,14,7,0),   0 0 0px rgba(210,14,7,0); outline: 2px solid rgba(210,14,7,0); }
+    20%  { box-shadow: inset 0 0 40px 4px rgba(210,14,7,.12), 0 0 32px rgba(210,14,7,.18); outline: 2px solid rgba(210,14,7,.45); }
+    60%  { box-shadow: inset 0 0 24px 2px rgba(45,5,226,.08),  0 0 18px rgba(45,5,226,.12); outline: 2px solid rgba(45,5,226,.3); }
+    100% { box-shadow: inset 0 0 0px 0px rgba(0,0,0,0),        0 0 0px rgba(0,0,0,0); outline: 2px solid rgba(0,0,0,0); }
+  }
+  .nav-flash {
+    animation: nav-highlight 1.6s ease forwards;
+    border-radius: 12px;
+  }
+
+  /* ── Nav link underline + hover glow ── */
+  .nav-link {
+    position: relative;
+    transition: color .25s ease, text-shadow .25s ease, letter-spacing .25s ease;
+  }
+  .nav-link::after {
+    content: ''; position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, #D20E07, #2D05E2);
+    border-radius: 2px;
+    transition: width .35s cubic-bezier(.16,1,.3,1);
+  }
+  .nav-link::before {
+    content: ''; position: absolute; bottom: -3px; left: 0;
+    width: 0; height: 2px;
+    background: linear-gradient(90deg, #D20E07, #2D05E2);
+    border-radius: 2px;
+    filter: blur(4px);
+    transition: width .35s cubic-bezier(.16,1,.3,1);
+    opacity: .7;
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after { width: 100%; }
+  .nav-link:hover::before,
+  .nav-link:focus-visible::before { width: 100%; }
+  .nav-link:hover, .nav-link:focus-visible {
+    color: #fff;
+    text-shadow: 0 0 12px rgba(210,14,7,.55), 0 0 28px rgba(45,5,226,.3);
+    letter-spacing: .09em;
+  }
+
+  /* ── Pill / tag ── */
+  .pill {
+    background: linear-gradient(135deg, rgba(210,14,7,.15), rgba(45,5,226,.15));
+    border: 1px solid rgba(210,14,7,.25);
+    backdrop-filter: blur(8px);
+  }
+
+  /* ── Scrollable panel (custom bar) ── */
+  .scroll-panel { overflow-y: auto; scrollbar-width: thin; scrollbar-color: #D20E07 #1a1a1a; }
+  .scroll-panel::-webkit-scrollbar       { width: 3px; }
+  .scroll-panel::-webkit-scrollbar-track { background: #1a1a1a; }
+  .scroll-panel::-webkit-scrollbar-thumb { background: #D20E07; border-radius: 2px; }
+
+  /* ── Early Bird Offer animations ── */
+  @keyframes eb-border-spin {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  @keyframes eb-card-onoff {
+    0%,38%  { opacity:1; transform:scale(1);    box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25); }
+    42%,48% { opacity:.08; transform:scale(.97); box-shadow:none; }
+    52%,90% { opacity:1; transform:scale(1);    box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25); }
+    94%,98% { opacity:.08; transform:scale(.97); box-shadow:none; }
+    100%    { opacity:1; transform:scale(1);    box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25); }
+  }
+  #eb-card { animation: eb-card-onoff 3.2s ease-in-out infinite; }
+  #eb-card:hover { animation-play-state: paused; opacity:1 !important; transform:scale(1.02) !important; }
+
+  /* ── Claim modal form ── */
+  .eb-input {
+    width:100%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+    border-radius:9px; padding:.65rem .9rem; color:#fff;
+    font-family:'Open Sans',sans-serif; font-size:.82rem; outline:none;
+    transition:border-color .2s ease, box-shadow .2s ease;
+  }
+  .eb-input:focus { border-color:#D20E07; box-shadow:0 0 0 3px rgba(210,14,7,.18); }
+  .eb-input::placeholder { color:rgba(187,187,187,.45); }
+  .eb-label {
+    font-family:'Montserrat',sans-serif; font-size:.65rem; font-weight:700;
+    color:#BBBBBB; letter-spacing:.1em; text-transform:uppercase; margin-bottom:.35rem; display:block;
+  }
+  .eb-submit {
+    width:100%; padding:.8rem 1rem; border:none; border-radius:10px; cursor:pointer;
+    background:linear-gradient(135deg,#D20E07,#a80b05);
+    color:#fff; font-family:'Montserrat',sans-serif; font-size:.85rem; font-weight:800;
+    letter-spacing:.04em; position:relative; overflow:hidden;
+    box-shadow:0 6px 24px rgba(210,14,7,.4); transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .eb-submit::after {
+    content:''; position:absolute; top:0; left:-100%; width:60%; height:100%;
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+    animation:eb-shimmer 2s linear infinite;
+  }
+  .eb-submit:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(210,14,7,.5); }
+  .eb-submit:disabled { opacity:.6; cursor:not-allowed; transform:none; }
+  @keyframes eb-shimmer {
+    0%   { transform: translateX(-100%) skewX(-20deg); }
+    100% { transform: translateX(250%) skewX(-20deg); }
+  }
+  @keyframes eb-price-pop {
+    0%,100% { transform: scale(1); }
+    50%      { transform: scale(1.06); }
+  }
+  @keyframes eb-badge-swing {
+    0%,100% { transform: rotate(-4deg) scale(1); }
+    50%      { transform: rotate(4deg) scale(1.08); }
+  }
+  @keyframes eb-spark {
+    0%   { transform: translateY(0) scale(1);   opacity: 1; }
+    100% { transform: translateY(-60px) scale(0); opacity: 0; }
+  }
+  @keyframes eb-glow-pulse {
+    0%,100% { opacity: .45; }
+    50%      { opacity: .9; }
+  }
+  @keyframes eb-urgency-blink {
+    0%,49%  { opacity: 1; }
+    50%,100% { opacity: 0; }
+  }
+  .eb-price { animation: eb-price-pop 2s ease-in-out infinite; display: inline-block; }
+  .eb-badge { animation: eb-badge-swing 1.8s ease-in-out infinite; display: inline-block; }
+  .eb-glow  { animation: eb-glow-pulse 2.2s ease-in-out infinite; }
+  .eb-blink { animation: eb-urgency-blink 1.2s step-end infinite; }
+  .eb-spark-dot {
+    position: absolute;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    animation: eb-spark 1.8s ease-out infinite;
+    pointer-events: none;
+  }
+  .eb-cta-btn {
+    position: relative; overflow: hidden;
+    background: linear-gradient(135deg, #D20E07, #a80b05);
+    color: #fff; border: none; border-radius: 10px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem; font-weight: 800;
+    letter-spacing: .04em; cursor: pointer;
+    padding: 1rem 2.5rem;
+    display: inline-flex; align-items: center; gap: .65rem;
+    text-decoration: none;
+    box-shadow: 0 8px 32px rgba(210,14,7,.45), 0 2px 8px rgba(0,0,0,.4);
+    transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease;
+  }
+  .eb-cta-btn::after {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.25), transparent);
+    animation: eb-shimmer 2.4s linear infinite;
+  }
+  .eb-cta-btn:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 16px 48px rgba(210,14,7,.55), 0 4px 16px rgba(0,0,0,.5);
+  }
+  .eb-cta-btn:active { transform: translateY(0) scale(.98); }
+
+  /* ── Curriculum sequential blink ── */
+  @keyframes curr-pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(45,5,226,0); filter: brightness(1); }
+    50%      { box-shadow: 0 0 22px 4px rgba(45,5,226,.55), 0 0 40px 8px rgba(210,14,7,.2); filter: brightness(1.12); }
+  }
+  .curr-card {
+    transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, opacity .35s ease, filter .35s ease;
+    position: relative;
+  }
+  .curr-card.curr-active {
+    animation: curr-pulse 1s ease-in-out infinite;
+    opacity: 1 !important;
+    z-index: 2;
+  }
+  .curr-card.curr-dim {
+    opacity: .45;
+    filter: brightness(.75);
+  }
+  .curr-card:hover {
+    transform: scale(1.07) translateY(-5px) !important;
+    box-shadow: 0 20px 56px rgba(45,5,226,.35), 0 6px 20px rgba(0,0,0,.6) !important;
+    opacity: 1 !important;
+    filter: brightness(1.08) !important;
+    z-index: 10;
+    animation: none !important;
+  }
+
+  /* ── Dots bg ── */
+  .dots-bg {
+    background-image: radial-gradient(circle, rgba(187,187,187,.065) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  /* ── Gradient divider ── */
+  .hr-grad { height: 1px; background: linear-gradient(90deg, transparent, rgba(210,14,7,.55), rgba(45,5,226,.55), transparent); }
+
+  /* ── Welcome ticker ── */
+  @keyframes ticker-ltr {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(100vw); }
+  }
+  #welcome-ticker {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    overflow: hidden;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(90deg, rgba(13,13,13,.97), rgba(30,10,50,.97));
+    border-bottom: 1px solid rgba(210,14,7,.3);
+    backdrop-filter: blur(10px);
+    transition: opacity .4s ease;
+  }
+  #welcome-ticker.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .ticker-track {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker-ltr 22s linear infinite;
+  }
+  .ticker-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: .88rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    color: #fff;
+    padding: 0 3rem;
+  }
+  .ticker-text span {
+    background: linear-gradient(90deg, #D20E07, #2D05E2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Image overlay zoom ── */
+  .img-wrap { overflow: hidden; }
+  .img-wrap img { transition: transform .6s cubic-bezier(.16,1,.3,1); }
+  .img-wrap:hover img { transform: scale(1.05); }
+
+  /* ── Modal ── */
+  .modal { opacity: 0; pointer-events: none; transition: opacity .28s ease; }
+  .modal.open { opacity: 1; pointer-events: all; }
+  .modal-box { transform: scale(.9) translateY(18px); transition: transform .38s cubic-bezier(.16,1,.3,1); }
+  .modal.open .modal-box { transform: scale(1) translateY(0); }
+
+  /* About modal flash overlay */
+  @keyframes about-flash {
+    0%   { opacity: 0; }
+    30%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  /* ── Venue pin oscillate ── */
+  #venue-pin {
+    transform-origin: top center;
+    cursor: default;
+  }
+  @keyframes pin-swing {
+    0%   { transform: translateY(-50%) rotate(-30deg); }
+    50%  { transform: translateY(-50%) rotate(30deg);  }
+    100% { transform: translateY(-50%) rotate(-30deg); }
+  }
+  #venue-pin:hover {
+    animation-play-state: paused !important;
+    transform: translateY(-50%) rotate(0deg) !important;
+    transition: transform .4s cubic-bezier(.16,1,.3,1);
+  }
+  #venue-pin:hover > div:last-child {
+    border-color: rgba(210,14,7,.8);
+    box-shadow: 0 20px 56px rgba(0,0,0,.75), 0 0 32px rgba(210,14,7,.25), 0 0 0 1px rgba(210,14,7,.2);
+    transform: scale(1.04);
+    transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .25s ease;
+  }
+  #venue-pin > div:last-child {
+    transition: transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s ease, border-color .25s ease;
+  }
+  @media (max-width: 1100px) {
+    #venue-pin { display: none; }
+  }
+
+  /* ── Section heading multicolor animation ── */
+  @keyframes sec-hue-shift {
+    0%   { background-position: 0%   50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0%   50%; }
+  }
+  .sec-heading {
+    background: linear-gradient(
+      270deg,
+      #ffffff,
+      #D20E07,
+      #ff6a3d,
+      #ffffff,
+      #BBBBBB,
+      #2D05E2,
+      #a78bfa,
+      #ffffff
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: sec-hue-shift 6s ease infinite;
+  }
+
+  /* ── Hero scroll indicator ── */
+  @keyframes bounce-down {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(6px); }
+  }
+  .bounce { animation: bounce-down 1.6s ease-in-out infinite; }
+
+  /* ── Button ── */
+  .btn-red {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .75rem 1.75rem;
+    background: #D20E07; color: #fff;
+    font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: .8rem;
+    letter-spacing: .07em; text-transform: uppercase;
+    border-radius: 2px;
+    transition: background .25s ease, transform .15s ease;
+    outline: none;
+  }
+  .btn-red:hover  { background: #a80b05; }
+  .btn-red:focus-visible { outline: 2px solid #D20E07; outline-offset: 3px; }
+  .btn-red:active { transform: scale(.96); }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: .5rem;
+    padding: .75rem 1.75rem;
+    border: 1px solid rgba(255,255,255,.2); color: #fff;
+    font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: .8rem;
+    letter-spacing: .07em; text-transform: uppercase;
+    border-radius: 2px;
+    transition: border-color .25s ease, color .25s ease, transform .15s ease;
+  }
+  .btn-ghost:hover  { border-color: #D20E07; color: #D20E07; }
+  .btn-ghost:active { transform: scale(.96); }
+
+  /* ── Three-column grid ── */
+  .tri-grid {
+    display: grid;
+    grid-template-columns: 290px 1fr 290px;
+    gap: 0;
+    align-items: start;
+  }
+  @media (max-width: 1180px) {
+    .tri-grid { grid-template-columns: 240px 1fr 240px; }
+  }
+  @media (max-width: 900px) {
+    .tri-grid { grid-template-columns: 1fr; }
+    .sticky-col { position: static !important; max-height: none !important; }
+  }
+
+  /* ── Sticky sidebar ── */
+  .sticky-col {
+    position: sticky;
+    top: 82px;
+    max-height: calc(100vh - 100px);
+  }
+  /* Curriculum aside must clear the fixed Early Bird card (~112px top + ~290px height) */
+  #curriculum.sticky-col {
+    top: 415px;
+    max-height: calc(100vh - 435px);
+  }
+
+  /* ── Pulsing dot ── */
+  @keyframes dot-pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.5;transform:scale(1.4);} }
+  .dot-pulse { animation: dot-pulse 1.8s ease-in-out infinite; }
+
+  /* ── CTA pulse ring ── */
+  .cta-wrap { position: relative; display: inline-block; }
+  @keyframes ring-out {
+    0%   { transform: scale(1); opacity: .7; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+  .cta-wrap::before {
+    content: ''; position: absolute; inset: -5px;
+    border: 2px solid rgba(210,14,7,.6); border-radius: 4px;
+    animation: ring-out 2.2s cubic-bezier(.16,1,.3,1) infinite;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     WELCOME TICKER (top of page)
+═══════════════════════════════════════════════════ -->
+<div id="welcome-ticker">
+  <div class="ticker-track">
+    <span class="ticker-text">👋 &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     STICKY HEADER
+═══════════════════════════════════════════════════ -->
+<header style="position:fixed;top:40px;left:0;right:0;z-index:200;background:rgba(13,13,13,.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,255,.06);">
+  <div style="height:2px;background:linear-gradient(90deg,transparent,#D20E07,#2D05E2,transparent);"></div>
+  <div style="max-width:1400px;margin:0 auto;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+
+    <!-- Logo -->
+    <a href="#" style="display:flex;align-items:center;gap:.75rem;text-decoration:none;flex-shrink:0;">
+      <img src="Brand_Workshop/Brand Logo.jpg" alt="AI Champ" style="height:42px;width:auto;border-radius:3px;">
+      <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:600;color:#BBBBBB;letter-spacing:.18em;text-transform:uppercase;line-height:1.3;">EduTech &amp; Consulting<br>AI Startup</span>
+    </a>
+
+    <!-- Nav -->
+    <nav style="display:flex;align-items:center;gap:2rem;" aria-label="Main navigation">
+      <a href="#about"     class="nav-link" style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;color:#BBBBBB;letter-spacing:.06em;text-decoration:none;">About</a>
+      <a href="#workshops-center" class="nav-link" onclick="navScrollTo('workshops-center');return false;" style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;color:#BBBBBB;letter-spacing:.06em;text-decoration:none;">Workshops</a>
+      <a href="#demo-video" class="nav-link" style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;color:#BBBBBB;letter-spacing:.06em;text-decoration:none;">Demo Video</a>
+      <a href="#curriculum" class="nav-link" onclick="navScrollTo('curriculum');return false;" style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;color:#BBBBBB;letter-spacing:.06em;text-decoration:none;">Curriculum</a>
+      <a href="#success-stories" class="nav-link" style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;color:#BBBBBB;letter-spacing:.06em;text-decoration:none;">Success Stories</a>
+      <a href="#contact"   class="nav-link" style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;color:#BBBBBB;letter-spacing:.06em;text-decoration:none;">Contact Us</a>
+    </nav>
+
+    <!-- CTA -->
+    <div class="cta-wrap" style="flex-shrink:0;">
+      <button onclick="openModal('m-enroll')" class="btn-red" style="border:none;cursor:pointer;">
+        Enroll Now
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     EARLY BIRD OFFER — compact fixed card (top-right)
+═══════════════════════════════════════════════════ -->
+<div id="eb-card" style="position:fixed;top:112px;right:1.25rem;z-index:800;width:220px;">
+  <!-- spinning border wrapper -->
+  <div style="padding:2px;border-radius:14px;background:linear-gradient(135deg,#D20E07,#2D05E2,#D20E07,#2D05E2);background-size:300% 300%;animation:eb-border-spin 3s linear infinite;box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25);">
+    <div style="background:linear-gradient(145deg,#13101a,#0e0c14);border-radius:13px;padding:.85rem 1rem;position:relative;overflow:hidden;">
+
+      <!-- spark particles -->
+      <span class="eb-spark-dot" style="background:#D20E07;left:15%;top:88%;animation-delay:0s;animation-duration:1.8s;"></span>
+      <span class="eb-spark-dot" style="background:#2D05E2;left:55%;top:92%;animation-delay:.7s;animation-duration:2s;"></span>
+      <span class="eb-spark-dot" style="background:#fff;left:82%;top:85%;animation-delay:1.2s;animation-duration:1.6s;"></span>
+
+      <!-- header row -->
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem;">
+        <span class="eb-blink" style="width:6px;height:6px;border-radius:50%;background:#D20E07;display:inline-block;flex-shrink:0;"></span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;color:#D20E07;letter-spacing:.14em;text-transform:uppercase;">Limited Time</span>
+      </div>
+
+      <!-- title -->
+      <div style="font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:900;color:#fff;margin-bottom:.55rem;line-height:1.2;">🎯 Early Bird Offer</div>
+
+      <!-- price row -->
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.55rem;flex-wrap:wrap;">
+        <span class="eb-price" style="font-family:'Montserrat',sans-serif;font-size:1.5rem;font-weight:900;color:#fff;line-height:1;">₹1299</span>
+        <div style="display:flex;flex-direction:column;gap:.05rem;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;color:#BBBBBB;text-decoration:line-through;">₹3499</span>
+          <span class="eb-badge" style="background:rgba(210,14,7,.9);color:#fff;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;padding:.15rem .45rem;border-radius:100px;letter-spacing:.06em;display:inline-block;">63% OFF</span>
+        </div>
+      </div>
+
+      <!-- includes mini list -->
+      <div style="margin-bottom:.75rem;display:flex;flex-direction:column;gap:.22rem;">
+        <div style="font-size:.62rem;color:rgba(255,255,255,.75);font-family:'Open Sans',sans-serif;display:flex;align-items:center;gap:.35rem;"><span style="color:#D20E07;font-weight:700;font-size:.65rem;">✓</span>Workshop + Certificate</div>
+        <div style="font-size:.62rem;color:rgba(255,255,255,.75);font-family:'Open Sans',sans-serif;display:flex;align-items:center;gap:.35rem;"><span style="color:#D20E07;font-weight:700;font-size:.65rem;">✓</span>Expert Mentoring</div>
+        <div style="font-size:.62rem;color:rgba(255,255,255,.75);font-family:'Open Sans',sans-serif;display:flex;align-items:center;gap:.35rem;"><span style="color:#D20E07;font-weight:700;font-size:.65rem;">✓</span>Project Kit</div>
+      </div>
+
+      <!-- CTA -->
+      <button onclick="openModal('m-claim')" class="eb-cta-btn" style="width:100%;justify-content:center;font-size:.68rem;padding:.6rem .75rem;border-radius:8px;border:none;cursor:pointer;">
+        Claim Offer
+        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════ -->
+<section style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:8rem 1.5rem 5rem;overflow:hidden;" class="dots-bg">
+
+  <!-- Background orbs -->
+  <div class="orb" style="--dur:9s;position:absolute;top:22%;left:18%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.18),transparent 70%);filter:blur(48px);pointer-events:none;"></div>
+  <div class="orb" style="--dur:12s;position:absolute;bottom:20%;right:16%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(45,5,226,.16),transparent 70%);filter:blur(48px);pointer-events:none;animation-direction:reverse;"></div>
+  <div class="orb" style="--dur:7s;position:absolute;top:55%;left:55%;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.1),transparent 70%);filter:blur(36px);pointer-events:none;"></div>
+
+  <!-- ── Venue & Fees Pinned Card ── -->
+  <div id="venue-pin" style="position:absolute;left:2.5rem;top:50%;z-index:20;width:240px;animation:pin-swing 2.4s ease-in-out infinite;">
+    <!-- pin emoji -->
+    <div style="text-align:center;font-size:1.4rem;line-height:1;margin-bottom:4px;">📌</div>
+    <!-- thread -->
+    <div style="width:2px;height:12px;background:linear-gradient(to bottom,#D20E07,rgba(210,14,7,.2));margin:0 auto;border-radius:2px;"></div>
+    <!-- card -->
+    <div style="background:#0f0e18;border:1.5px solid rgba(210,14,7,.45);border-radius:16px;padding:1rem 1.1rem 1.1rem;box-shadow:0 16px 48px rgba(0,0,0,.65),0 0 24px rgba(210,14,7,.1);">
+
+      <!-- Venues label -->
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.5rem;">
+        <span style="font-size:1rem;">📍</span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#D20E07;letter-spacing:.15em;text-transform:uppercase;">Venues</span>
+      </div>
+      <!-- Venue 1 -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.5rem .65rem;margin-bottom:.4rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;color:#fff;line-height:1.3;">Orchids International School</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:#BBBBBB;margin-top:.1rem;">New Town, Kolkata</div>
+      </div>
+      <!-- Venue 2 -->
+      <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.5rem .65rem;margin-bottom:.85rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;color:#fff;line-height:1.3;">Haryana International Academy</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:#BBBBBB;margin-top:.1rem;">Rajarhat, Kolkata</div>
+      </div>
+
+      <!-- Divider -->
+      <div style="height:1px;background:linear-gradient(to right,transparent,rgba(210,14,7,.4),transparent);margin-bottom:.85rem;"></div>
+
+      <!-- Combo Offer label -->
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.55rem;">
+        <span style="font-size:1rem;">💰</span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#2D05E2;letter-spacing:.15em;text-transform:uppercase;">Combo Offer</span>
+      </div>
+      <!-- Price row -->
+      <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem;">
+        <span style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:900;color:#fff;line-height:1;">₹1,999</span>
+        <div style="display:flex;flex-direction:column;gap:.1rem;">
+          <span style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:#BBBBBB;text-decoration:line-through;">Market: ₹5,998</span>
+          <span style="background:#D20E07;color:#fff;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;padding:.1rem .45rem;border-radius:100px;display:inline-block;letter-spacing:.04em;">~67% OFF</span>
+        </div>
+      </div>
+      <!-- Clarification -->
+      <div style="background:rgba(45,5,226,.1);border:1px solid rgba(45,5,226,.2);border-radius:8px;padding:.45rem .6rem;">
+        <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:#c0c0e0;line-height:1.6;">
+          Both workshops combined at <strong style="color:#fff;">₹1,999</strong> — not ₹2,298 (individual sum). Save big with the AIC combo!
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- /venue-pin -->
+
+  <div style="position:relative;z-index:10;max-width:860px;text-align:center;">
+
+    <!-- Badge -->
+    <div class="sr pill d1" style="display:inline-flex;align-items:center;gap:.6rem;padding:.45rem 1.1rem;border-radius:100px;margin-bottom:2rem;">
+      <span class="dot-pulse" style="width:8px;height:8px;border-radius:50%;background:#D20E07;display:inline-block;"></span>
+      <span style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:#BBBBBB;letter-spacing:.16em;text-transform:uppercase;">Summer 2026 &nbsp;·&nbsp; AI Workshops Now Open</span>
+    </div>
+
+    <!-- Headline -->
+    <h1 class="sr d2" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,7rem);line-height:.92;letter-spacing:-0.03em;margin-bottom:1.5rem;">
+      <span class="grad-text">Become an</span><br>
+      <span style="color:#fff;">AI Champion</span>
+    </h1>
+
+    <!-- Sub -->
+    <p class="sr d3" style="font-family:'Open Sans',sans-serif;font-size:1.05rem;line-height:1.75;color:#BBBBBB;max-width:600px;margin:0 auto 2.5rem;">
+      India's pioneering EduTech &amp; Consulting AI startup delivering world-class <strong style="color:#fff;">workshops</strong>,
+      <strong style="color:#fff;">certifications</strong>, and <strong style="color:#fff;">mentoring</strong> —
+      from <em>Promptly Pro</em> to <em>Agentic AI thinking</em> for School and College Students.
+    </p>
+
+
+    <!-- Buttons -->
+    <div class="sr d4" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;margin-bottom:4rem;">
+      <a href="#workshops" class="btn-red">
+        Explore Workshops
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="#about" class="btn-ghost" onclick="openModal('m-about'); return false;">
+        About AI Champ
+      </a>
+    </div>
+
+    <!-- Stats strip -->
+    <div class="sr d5" style="display:grid;grid-template-columns:repeat(3,1fr);max-width:400px;margin:0 auto;border-top:1px solid rgba(255,255,255,.1);padding-top:2.5rem;">
+      <div style="text-align:center;padding-right:1.5rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:900;color:#fff;">95%+</div>
+        <div style="font-size:.68rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Class Average</div>
+      </div>
+      <div style="text-align:center;padding:0 1.5rem;border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1);">
+        <div style="font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:900;color:#fff;">20+</div>
+        <div style="font-size:.68rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Industry Experts</div>
+      </div>
+      <div style="text-align:center;padding-left:1.5rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:2rem;font-weight:900;color:#fff;">IIP</div>
+        <div style="font-size:.68rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Partner: IIT Packaging</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+  <div class="bounce" style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;opacity:.4;">
+    <span style="font-family:'Montserrat',sans-serif;font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:#BBBBBB;">Scroll</span>
+    <svg width="18" height="18" fill="none" stroke="#BBBBBB" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </div>
+</section>
+
+<div class="hr-grad"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     THREE-COLUMN MAIN CONTENT
+═══════════════════════════════════════════════════ -->
+<section id="workshops" style="max-width:1400px;margin:0 auto;padding:5rem 1rem;">
+  <div class="tri-grid" style="gap:1.5rem;">
+
+    <!-- ─────────────────────────────────────
+         LEFT SIDEBAR — About & Why AI Champ
+    ───────────────────────────────────── -->
+    <aside id="about" class="sticky-col scroll-panel" style="padding-right:.75rem;">
+
+      <div class="sr-left" style="margin-bottom:1.75rem;">
+        <div class="pill" style="display:inline-block;padding:.3rem .9rem;border-radius:100px;margin-bottom:.75rem;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#D20E07;letter-spacing:.16em;text-transform:uppercase;">About Us</span>
+        </div>
+        <h2 class="sec-heading" style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;">Who We Are</h2>
+        <div style="width:40px;height:2px;background:#D20E07;"></div>
+      </div>
+
+      <!-- About AI Champ image card -->
+      <div class="card glow-border img-wrap sr-left d1" style="border-radius:10px;overflow:hidden;margin-bottom:1.5rem;cursor:pointer;position:relative;" onclick="openModal('m-about')" role="button" tabindex="0" aria-label="View About AI Champ">
+        <img src="About AI Champ.jpeg" alt="About AI Champ" style="width:100%;display:block;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#D20E07;display:inline-block;"></span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:#fff;letter-spacing:.05em;">About AI Champ</span>
+          </div>
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;">
+            <svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+        <!-- hover tint -->
+        <div style="position:absolute;inset:0;background:rgba(210,14,7,.1);opacity:0;transition:opacity .3s ease;" class="hover-tint" onmouseenter="this.style.opacity=1" onmouseleave="this.style.opacity=0"></div>
+      </div>
+
+      <!-- Why AI Champ image card -->
+      <div class="card glow-border img-wrap sr-left d2" style="border-radius:10px;overflow:hidden;cursor:pointer;position:relative;" onclick="openModal('m-why')" role="button" tabindex="0" aria-label="View Why AI Champ">
+        <img src="Why AI Champ.jpeg" alt="Why AI Champ" style="width:100%;display:block;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.72) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:1rem;display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:.5rem;">
+            <span style="width:6px;height:6px;border-radius:50%;background:#2D05E2;display:inline-block;"></span>
+            <span style="font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:#fff;letter-spacing:.05em;">Why AI Champ?</span>
+          </div>
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;">
+            <svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick facts box -->
+      <div class="sr-left d3" style="margin-top:1.5rem;padding:1.1rem;background:rgba(255,255,255,.04);border-radius:10px;border:1px solid rgba(255,255,255,.08);">
+        <p style="font-size:.73rem;line-height:1.7;color:#BBBBBB;">
+          🎓 First AI Summer Workshop in <strong style="color:#fff;">Eastern Kolkata</strong>.<br>
+          95.8% average at Rammohon College with <em>AI for Everyone</em>.<br>
+          Partner: <strong style="color:#fff;">Indian Institute of Packaging</strong>.
+        </p>
+        <a href="#contact" style="display:inline-flex;align-items:center;gap:.35rem;margin-top:.85rem;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:#D20E07;text-decoration:none;letter-spacing:.05em;transition:color .2s ease;" onmouseover="this.style.color='#ff1a11'" onmouseout="this.style.color='#D20E07'">
+          Get in Touch
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+    </aside>
+
+
+    <!-- ─────────────────────────────────────
+         CENTER — Workshop + Student Benefits
+    ───────────────────────────────────── -->
+    <main id="workshops-center" style="padding:0 .75rem;scroll-margin-top:120px;">
+
+      <!-- Section header -->
+      <div class="sr" style="text-align:center;margin-bottom:3rem;">
+        <div class="pill" style="display:inline-block;padding:.3rem .9rem;border-radius:100px;margin-bottom:.75rem;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#D20E07;letter-spacing:.16em;text-transform:uppercase;">Featured · Summer 2026</span>
+        </div>
+        <h2 class="sec-heading" style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3vw,2.4rem);font-weight:900;letter-spacing:-.025em;margin-bottom:.75rem;">
+          AI Workshops &amp; Certifications
+        </h2>
+        <p style="font-size:.85rem;line-height:1.75;color:#BBBBBB;max-width:520px;margin:0 auto;">
+          Join Eastern Kolkata's first AI Summer Workshop. Build real AI agents, earn your inaugural certificate, and innovate with case studies.
+        </p>
+      </div>
+
+      <!-- IMAGE CAROUSEL — auto up/down shuffle -->
+      <div id="img-carousel" style="position:relative;border-radius:14px;overflow:hidden;margin-bottom:2rem;height:420px;">
+
+        <!-- Slide 0: Workshop 1 -->
+        <div class="img-slide active-slide" data-index="0" onclick="openModal('m-workshop')" role="button" tabindex="0" aria-label="View Workshop 1 details" style="position:absolute;inset:0;cursor:pointer;border-radius:14px;overflow:hidden;border:1px solid rgba(210,14,7,.3);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);transform:translateY(0);opacity:1;">
+          <img src="WORKSHOP 1.jpeg" alt="AI Champ Workshop 1 — Summer 2026" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.15) 50%,transparent 100%);pointer-events:none;"></div>
+          <!-- Top badge -->
+          <div style="position:absolute;top:1rem;left:1rem;">
+            <div class="pill" style="padding:.3rem .75rem;border-radius:100px;">
+              <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#fff;letter-spacing:.12em;text-transform:uppercase;">Summer 2026</span>
+            </div>
+          </div>
+          <!-- Bottom content -->
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.75rem;">
+            <h3 style="font-family:'Montserrat',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:.5rem;">AI Champ Proudly Presents</h3>
+            <p style="font-size:.8rem;color:rgba(255,255,255,.75);margin-bottom:1rem;">Promptly Pro &amp; Agentic Way — Summer Workshop May 1–17</p>
+            <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.65rem;">
+              <div style="display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);padding:.35rem .75rem;border-radius:100px;">
+                <svg width="12" height="12" fill="#D20E07" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <span style="font-size:.7rem;color:rgba(255,255,255,.85);font-family:'Open Sans',sans-serif;">Eastern Kolkata</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);padding:.35rem .75rem;border-radius:100px;">
+                <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span style="font-size:.7rem;color:rgba(255,255,255,.85);font-family:'Open Sans',sans-serif;">Click to view details</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 1: Student Benefits -->
+        <div class="img-slide" data-index="1" onclick="openModal('m-benefits')" role="button" tabindex="0" aria-label="View 10 Student Benefits" style="position:absolute;inset:0;cursor:pointer;border-radius:14px;overflow:hidden;border:1px solid rgba(45,5,226,.3);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);transform:translateY(100%);opacity:0;">
+          <img src="Student Benefits.jpeg" alt="10 Key Benefits Students Will Receive" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1);">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.1) 50%,transparent 100%);pointer-events:none;"></div>
+          <!-- Top badge -->
+          <div style="position:absolute;top:1rem;left:1rem;">
+            <div class="pill" style="padding:.3rem .75rem;border-radius:100px;">
+              <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#BBBBBB;letter-spacing:.12em;text-transform:uppercase;">10 Key Benefits</span>
+            </div>
+          </div>
+          <!-- Bottom -->
+          <div style="position:absolute;bottom:0;left:0;right:0;padding:1.75rem;">
+            <h3 style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:.5rem;">10 Benefits Students Will Receive</h3>
+            <p style="font-size:.78rem;color:rgba(255,255,255,.7);margin-bottom:1rem;">AI certifications, real-world projects, innovation awards, mentoring from 20 industry experts, and startup-ready skills.</p>
+            <button style="display:inline-flex;align-items:center;gap:.4rem;background:none;border:none;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;color:#D20E07;cursor:pointer;letter-spacing:.04em;padding:0;" onclick="event.stopPropagation();openModal('m-benefits')">
+              View All Benefits
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dot indicators -->
+        <div style="position:absolute;bottom:.85rem;right:1rem;display:flex;gap:.4rem;z-index:10;">
+          <span id="dot-0" style="width:7px;height:7px;border-radius:50%;background:#D20E07;display:block;transition:background .3s;"></span>
+          <span id="dot-1" style="width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.3);display:block;transition:background .3s;"></span>
+        </div>
+      </div>
+
+      <script>
+        (function(){
+          var slides = document.querySelectorAll('#img-carousel .img-slide');
+          var dots   = [document.getElementById('dot-0'), document.getElementById('dot-1')];
+          var current = 0;
+          var direction = 1; // 1 = scroll up (next), -1 = scroll down (prev)
+
+          function goTo(next) {
+            var prev = current;
+            // outgoing: slide up (direction=1) or slide down (direction=-1)
+            slides[prev].style.transform = direction === 1 ? 'translateY(-100%)' : 'translateY(100%)';
+            slides[prev].style.opacity   = '0';
+            // incoming: arrive from below (direction=1) or from above (direction=-1)
+            slides[next].style.transition = 'none';
+            slides[next].style.transform  = direction === 1 ? 'translateY(100%)' : 'translateY(-100%)';
+            slides[next].style.opacity    = '0';
+            requestAnimationFrame(function(){
+              requestAnimationFrame(function(){
+                slides[next].style.transition = 'transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1)';
+                slides[next].style.transform  = 'translateY(0)';
+                slides[next].style.opacity    = '1';
+              });
+            });
+            dots[prev].style.background = 'rgba(255,255,255,.3)';
+            dots[next].style.background = next === 0 ? '#D20E07' : '#2D05E2';
+            current = next;
+          }
+
+          setInterval(function(){
+            var next = (current + 1) % slides.length;
+            // alternate direction: up when going forward, down when wrapping back
+            direction = (next > current) ? 1 : -1;
+            goTo(next);
+          }, 4000);
+        })();
+      </script>
+
+      <!-- Info cards row -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="sr d1" style="padding:1.25rem;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.08);transition:border-color .25s ease;" onmouseover="this.style.borderColor='rgba(210,14,7,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(210,14,7,.18);display:flex;align-items:center;justify-content:center;margin-bottom:.85rem;">
+            <svg width="17" height="17" fill="none" stroke="#D20E07" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h4 style="font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;color:#fff;margin-bottom:.4rem;">AI Certifications</h4>
+          <p style="font-size:.72rem;line-height:1.65;color:#BBBBBB;">Inaugural AI certificates awarded for completing school projects and case studies.</p>
+        </div>
+        <div class="sr d2" style="padding:1.25rem;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.08);transition:border-color .25s ease;" onmouseover="this.style.borderColor='rgba(45,5,226,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+          <div style="width:34px;height:34px;border-radius:8px;background:rgba(45,5,226,.18);display:flex;align-items:center;justify-content:center;margin-bottom:.85rem;">
+            <svg width="17" height="17" fill="none" stroke="#2D05E2" stroke-width="2" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h4 style="font-family:'Montserrat',sans-serif;font-size:.78rem;font-weight:700;color:#fff;margin-bottom:.4rem;">Expert Mentoring</h4>
+          <p style="font-size:.72rem;line-height:1.65;color:#BBBBBB;">Real-world guidance from 20 professionals who tackled global challenges for Fortune clients.</p>
+        </div>
+      </div>
+    </main>
+
+
+    <!-- ─────────────────────────────────────
+         RIGHT SIDEBAR — 4 Curriculum Images
+    ───────────────────────────────────── -->
+    <aside id="curriculum" class="sticky-col scroll-panel" style="padding-left:.75rem;">
+
+      <div class="sr-right" style="margin-bottom:1.75rem;">
+        <h2 class="sec-heading" style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem;">Curriculum Details</h2>
+        <div style="width:40px;height:2px;background:#2D05E2;"></div>
+      </div>
+
+      <!-- Image 1: Agentic Way Workshop -->
+      <div class="card glow-border img-wrap sr-right d1 curr-card" style="border-radius:10px;overflow:hidden;margin-bottom:1.25rem;cursor:pointer;position:relative;" onclick="openModal('m-agentic')" role="button" tabindex="0" aria-label="View Agentic Way Workshop">
+        <img src="Agentic Way Workshop.jpeg" alt="Agentic Way Workshop" style="width:100%;display:block;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:.85rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:#fff;">Agentic Way Workshop</span>
+          <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Image 2: What is an AI Agent -->
+      <div class="card glow-border img-wrap sr-right d2 curr-card" style="border-radius:10px;overflow:hidden;margin-bottom:1.25rem;cursor:pointer;position:relative;" onclick="openModal('m-agent')" role="button" tabindex="0" aria-label="View What is an AI Agent">
+        <img src="What is an AI Agent.jpeg" alt="What is an AI Agent?" style="width:100%;display:block;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:.85rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:#fff;">What is an AI Agent?</span>
+          <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Image 3: Why Promptly Pro -->
+      <div class="card glow-border img-wrap sr-right d3 curr-card" style="border-radius:10px;overflow:hidden;margin-bottom:1.25rem;cursor:pointer;position:relative;" onclick="openModal('m-promptly')" role="button" tabindex="0" aria-label="View Why Promptly Pro">
+        <img src="Why Promptly Pro.jpeg" alt="Why Promptly Pro" style="width:100%;display:block;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:.85rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:#fff;">Why Promptly Pro?</span>
+          <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+      <!-- Image 4: Why Think in Agentic Way -->
+      <div class="card glow-border img-wrap sr-right d4 curr-card" style="border-radius:10px;overflow:hidden;cursor:pointer;position:relative;" onclick="openModal('m-think')" role="button" tabindex="0" aria-label="View Why Think in an Agentic Way">
+        <img src="Why think in an agentic way.jpeg" alt="Why Think in an Agentic Way" style="width:100%;display:block;">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.75) 0%,transparent 55%);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:.85rem;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:700;color:#fff;">Why Think Agentic?</span>
+          <svg width="12" height="12" fill="none" stroke="rgba(255,255,255,.7)" stroke-width="2" viewBox="0 0 24 24"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+
+    </aside>
+
+  </div><!-- /tri-grid -->
+</section>
+
+<div class="hr-grad"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PROMO VIDEO
+═══════════════════════════════════════════════════ -->
+<section id="demo-video" style="position:relative;overflow:hidden;padding:5rem 1.5rem 4rem;scroll-margin-top:120px;" class="dots-bg">
+
+  <!-- Background orb -->
+  <div class="orb" style="--dur:11s;position:absolute;top:30%;left:50%;transform:translateX(-50%);width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.1),transparent 70%);filter:blur(60px);pointer-events:none;"></div>
+
+  <div style="max-width:900px;margin:0 auto;position:relative;z-index:2;">
+
+    <!-- Section header -->
+    <div class="sr" style="text-align:center;margin-bottom:2.5rem;">
+      <div class="pill" style="display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1.1rem;border-radius:100px;margin-bottom:1rem;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#D20E07;display:inline-block;animation:dot-pulse 1.8s ease-in-out infinite;"></span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#D20E07;letter-spacing:.18em;text-transform:uppercase;">Watch · AI Champ in Action</span>
+      </div>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.1;margin-bottom:.75rem;">
+        Our Workshop <span style="background:linear-gradient(90deg,#D20E07,#2D05E2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Promo Video</span>
+      </h2>
+      <p style="font-family:'Open Sans',sans-serif;font-size:.85rem;color:#BBBBBB;line-height:1.7;max-width:500px;margin:0 auto;">
+        See what the Summer AI Camp experience looks like. Hit play to watch Arushi take you through AI Champ's world.
+      </p>
+    </div>
+
+    <!-- 16:9 Video wrapper -->
+    <div class="sr" id="promo-video-wrap" style="
+      position:relative;
+      width:100%;
+      padding-bottom:56.25%; /* 16:9 */
+      border-radius:20px;
+      overflow:hidden;
+      border:1.5px solid rgba(210,14,7,.3);
+      box-shadow:0 24px 72px rgba(0,0,0,.65),0 0 0 1px rgba(210,14,7,.08);
+      background:#000;
+      cursor:pointer;
+    ">
+
+      <!-- Video element -->
+      <video
+        id="promo-video"
+        src="AICI Workshop Promo_Arushi.mp4"
+        preload="metadata"
+        playsinline
+        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;"
+      ></video>
+
+      <!-- Dark overlay (hides when playing) -->
+      <div id="promo-overlay" style="
+        position:absolute;inset:0;
+        background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,.25) 50%,rgba(0,0,0,.45) 100%);
+        border-radius:20px;
+        transition:opacity .35s ease;
+        pointer-events:none;
+      "></div>
+
+      <!-- Big play button (center) -->
+      <div id="promo-playbtn" style="
+        position:absolute;top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        width:72px;height:72px;border-radius:50%;
+        background:rgba(210,14,7,.92);
+        border:3px solid rgba(255,255,255,.3);
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 8px 32px rgba(210,14,7,.55),0 2px 12px rgba(0,0,0,.5);
+        transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,opacity .3s ease;
+        pointer-events:none;
+      ">
+        <svg id="promo-play-icon" width="26" height="26" viewBox="0 0 24 24" fill="#fff">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <!-- pause icon (hidden by default) -->
+        <svg id="promo-pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="#fff" style="display:none;">
+          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+      </div>
+
+      <!-- Bottom label bar -->
+      <div style="position:absolute;bottom:0;left:0;right:0;padding:.9rem 1.25rem;display:flex;align-items:center;justify-content:space-between;pointer-events:none;">
+        <div style="display:flex;align-items:center;gap:.55rem;">
+          <span style="width:7px;height:7px;border-radius:50%;background:#D20E07;display:inline-block;animation:dot-pulse 1.8s ease-in-out infinite;"></span>
+          <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:700;color:#fff;letter-spacing:.08em;">AI Champ · Workshop Promo</span>
+        </div>
+        <div class="pill" style="padding:.25rem .65rem;border-radius:100px;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase;">Summer 2026</span>
+        </div>
+      </div>
+
+    </div><!-- /video wrapper -->
+
+  </div>
+</section>
+
+<script>
+(function(){
+  var wrap  = document.getElementById('promo-video-wrap');
+  var video = document.getElementById('promo-video');
+  var overlay   = document.getElementById('promo-overlay');
+  var playbtn   = document.getElementById('promo-playbtn');
+  var playIcon  = document.getElementById('promo-play-icon');
+  var pauseIcon = document.getElementById('promo-pause-icon');
+
+  function setPlaying(playing) {
+    if (playing) {
+      overlay.style.opacity   = '0';
+      playbtn.style.opacity   = '0';
+    } else {
+      overlay.style.opacity   = '1';
+      playbtn.style.opacity   = '1';
+      playIcon.style.display  = 'block';
+      pauseIcon.style.display = 'none';
+    }
+  }
+
+  // click on wrapper toggles play/pause
+  wrap.addEventListener('click', function() {
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  });
+
+  // show pause icon while playing; show play icon when paused
+  video.addEventListener('play', function() {
+    playIcon.style.display  = 'none';
+    pauseIcon.style.display = 'block';
+    // briefly show pause btn then fade out
+    playbtn.style.opacity = '1';
+    setTimeout(function(){ playbtn.style.opacity = '0'; overlay.style.opacity = '0'; }, 600);
+  });
+
+  video.addEventListener('pause', function() {
+    setPlaying(false);
+  });
+
+  video.addEventListener('ended', function() {
+    setPlaying(false);
+    video.currentTime = 0;
+  });
+
+  // hover: show play/pause button
+  wrap.addEventListener('mouseenter', function() {
+    playbtn.style.opacity   = '1';
+    playbtn.style.transform = 'translate(-50%,-50%) scale(1.1)';
+    playbtn.style.boxShadow = '0 12px 40px rgba(210,14,7,.7),0 2px 12px rgba(0,0,0,.5)';
+  });
+  wrap.addEventListener('mouseleave', function() {
+    if (!video.paused) {
+      playbtn.style.opacity = '0';
+    }
+    playbtn.style.transform = 'translate(-50%,-50%) scale(1)';
+    playbtn.style.boxShadow = '0 8px 32px rgba(210,14,7,.55),0 2px 12px rgba(0,0,0,.5)';
+  });
+})();
+</script>
+
+<div class="hr-grad"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     SUCCESS STORIES
+═══════════════════════════════════════════════════ -->
+<section id="success-stories" style="position:relative;overflow:hidden;padding:6rem 1.5rem;scroll-margin-top:120px;" class="dots-bg">
+
+  <!-- Background orbs -->
+  <div class="orb" style="--dur:11s;position:absolute;top:30%;left:5%;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(45,5,226,.13),transparent 70%);filter:blur(52px);pointer-events:none;"></div>
+  <div class="orb" style="--dur:9s;position:absolute;bottom:20%;right:8%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.12),transparent 70%);filter:blur(48px);pointer-events:none;animation-direction:reverse;"></div>
+
+  <div style="max-width:1100px;margin:0 auto;position:relative;z-index:2;">
+
+    <!-- Section header -->
+    <div class="sr" style="text-align:center;margin-bottom:3.5rem;">
+      <div class="pill" style="display:inline-flex;align-items:center;gap:.6rem;padding:.4rem 1.1rem;border-radius:100px;margin-bottom:1rem;">
+        <span style="width:7px;height:7px;border-radius:50%;background:#2D05E2;display:inline-block;animation:dot-pulse 1.8s ease-in-out infinite;"></span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#2D05E2;letter-spacing:.18em;text-transform:uppercase;">Proven Track Record · 2025</span>
+      </div>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.05;margin-bottom:.85rem;">
+        Where We've Already<br><span style="background:linear-gradient(90deg,#D20E07,#2D05E2);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Made an Impact</span>
+      </h2>
+      <p style="font-family:'Open Sans',sans-serif;font-size:.9rem;color:#BBBBBB;line-height:1.75;max-width:560px;margin:0 auto;">
+        Before the Summer Camp, AI Champ successfully delivered <strong style="color:#fff;">AI Workshops</strong>, <strong style="color:#fff;">Data Literacy</strong> and <strong style="color:#fff;">AI Engineering</strong> trainings at premier institutions across Kolkata in 2025.
+      </p>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="sr" style="display:flex;flex-wrap:wrap;justify-content:center;gap:0;max-width:680px;margin:0 auto 3.5rem;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03);">
+      <div style="flex:1;min-width:140px;padding:1.25rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,.08);">
+        <div style="font-family:'Montserrat',sans-serif;font-size:1.9rem;font-weight:900;color:#fff;line-height:1;">5+</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Institutions</div>
+      </div>
+      <div style="flex:1;min-width:140px;padding:1.25rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,.08);">
+        <div style="font-family:'Montserrat',sans-serif;font-size:1.9rem;font-weight:900;color:#D20E07;line-height:1;">95.8%</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Avg. Score</div>
+      </div>
+      <div style="flex:1;min-width:140px;padding:1.25rem 1rem;text-align:center;border-right:1px solid rgba(255,255,255,.08);">
+        <div style="font-family:'Montserrat',sans-serif;font-size:1.9rem;font-weight:900;color:#fff;line-height:1;">15+</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Programmes</div>
+      </div>
+      <div style="flex:1;min-width:140px;padding:1.25rem 1rem;text-align:center;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:1.9rem;font-weight:900;color:#2D05E2;line-height:1;">2025</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#BBBBBB;margin-top:.25rem;letter-spacing:.06em;">Delivered</div>
+      </div>
+    </div>
+
+    <!-- Story cards intro label -->
+    <div class="sr" style="text-align:center;margin-bottom:1.75rem;">
+      <span style="font-family:'Open Sans',sans-serif;font-size:.85rem;color:#BBBBBB;font-style:italic;letter-spacing:.04em;">— Some of the glimpses are —</span>
+    </div>
+
+    <!-- Story cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem;">
+
+      <!-- Card 1: IIP -->
+      <div class="sr-left" style="border-radius:20px;overflow:hidden;border:1px solid rgba(210,14,7,.2);background:linear-gradient(160deg,#111018,#0d0c14);box-shadow:0 16px 48px rgba(0,0,0,.45);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 28px 64px rgba(210,14,7,.18),0 8px 24px rgba(0,0,0,.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 16px 48px rgba(0,0,0,.45)'">
+
+        <!-- Image -->
+        <div style="position:relative;overflow:hidden;height:240px;">
+          <img src="IIP Image.jpg" alt="AI Training at Indian Institute of Packaging" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1);" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(13,12,20,.95) 0%,rgba(13,12,20,.3) 50%,transparent 100%);pointer-events:none;"></div>
+          <!-- Year badge -->
+          <div style="position:absolute;top:1rem;left:1rem;background:rgba(210,14,7,.9);backdrop-filter:blur(8px);padding:.3rem .75rem;border-radius:100px;">
+            <span style="font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:800;color:#fff;letter-spacing:.12em;text-transform:uppercase;">2025 · Completed</span>
+          </div>
+          <!-- IIP logo text overlay -->
+          <div style="position:absolute;bottom:.85rem;left:1rem;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.08em;text-transform:uppercase;">Partner Institution</div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div style="padding:1.5rem 1.5rem 1.75rem;">
+
+          <!-- Institution name -->
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem;">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(210,14,7,.18);border:1px solid rgba(210,14,7,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" fill="none" stroke="#D20E07" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:900;color:#fff;line-height:1.2;">Indian Institute of</div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:900;color:#D20E07;line-height:1.2;">Packaging (IIP)</div>
+            </div>
+          </div>
+
+          <p style="font-family:'Open Sans',sans-serif;font-size:.78rem;color:#BBBBBB;line-height:1.7;margin-bottom:1.1rem;">
+            Delivered a comprehensive <strong style="color:#fff;">AI for Everyone</strong> programme — covering Data Literacy, AI Engineering, and real-world AI applications to packaging and engineering professionals.
+          </p>
+
+          <!-- Tags -->
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.1rem;">
+            <span style="font-size:.62rem;font-family:'Open Sans',sans-serif;color:#D20E07;background:rgba(210,14,7,.12);border:1px solid rgba(210,14,7,.25);padding:.2rem .6rem;border-radius:100px;">AI Workshop</span>
+            <span style="font-size:.62rem;font-family:'Open Sans',sans-serif;color:#BBBBBB;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.2rem .6rem;border-radius:100px;">Data Literacy</span>
+            <span style="font-size:.62rem;font-family:'Open Sans',sans-serif;color:#BBBBBB;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.2rem .6rem;border-radius:100px;">AI Engineering</span>
+          </div>
+
+          <!-- Outcome highlight -->
+          <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:rgba(210,14,7,.08);border:1px solid rgba(210,14,7,.18);border-radius:10px;">
+            <svg width="16" height="16" fill="#D20E07" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;color:#D20E07;letter-spacing:.06em;text-transform:uppercase;">Outcome</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:.72rem;color:#fff;margin-top:.1rem;">95.8% class average · Equipped with semester syllabus and students familiarized with AI scaling, Data artifacts at global industrial use cases.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: City College -->
+      <div class="sr-right" style="border-radius:20px;overflow:hidden;border:1px solid rgba(45,5,226,.2);background:linear-gradient(160deg,#0e0d18,#0b0c14);box-shadow:0 16px 48px rgba(0,0,0,.45);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease;" onmouseover="this.style.transform='translateY(-8px)';this.style.boxShadow='0 28px 64px rgba(45,5,226,.18),0 8px 24px rgba(0,0,0,.5)'" onmouseout="this.style.transform='';this.style.boxShadow='0 16px 48px rgba(0,0,0,.45)'">
+
+        <!-- Image -->
+        <div style="position:relative;overflow:hidden;height:240px;">
+          <img src="City College image.jpeg" alt="AI Training at City College Kolkata" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1);" onmouseover="this.style.transform='scale(1.06)'" onmouseout="this.style.transform='scale(1)'">
+          <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(11,12,20,.95) 0%,rgba(11,12,20,.3) 50%,transparent 100%);pointer-events:none;"></div>
+          <!-- Year badge -->
+          <div style="position:absolute;top:1rem;left:1rem;background:rgba(45,5,226,.9);backdrop-filter:blur(8px);padding:.3rem .75rem;border-radius:100px;">
+            <span style="font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:800;color:#fff;letter-spacing:.12em;text-transform:uppercase;">2025 · Completed</span>
+          </div>
+          <div style="position:absolute;bottom:.85rem;left:1rem;">
+            <div style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:700;color:rgba(255,255,255,.6);letter-spacing:.08em;text-transform:uppercase;">Partner Institution</div>
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div style="padding:1.5rem 1.5rem 1.75rem;">
+
+          <!-- Institution name -->
+          <div style="display:flex;align-items:center;gap:.6rem;margin-bottom:.85rem;">
+            <div style="width:36px;height:36px;border-radius:10px;background:rgba(45,5,226,.18);border:1px solid rgba(45,5,226,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+              <svg width="18" height="18" fill="none" stroke="#2D05E2" stroke-width="2" viewBox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5z" stroke-linecap="round" stroke-linejoin="round"/><path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:900;color:#fff;line-height:1.2;">City College</div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:900;color:#2D05E2;line-height:1.2;">Kolkata</div>
+            </div>
+          </div>
+
+          <p style="font-family:'Open Sans',sans-serif;font-size:.78rem;color:#BBBBBB;line-height:1.7;margin-bottom:1.1rem;">
+            Conducted an immersive <strong style="color:#fff;">AI Training</strong> programme for students — introducing Agentic AI thinking, Python Programming, AI Fundamentals &amp; Usage and practical AI tools to prepare them for the future workforce.
+          </p>
+
+          <!-- Tags -->
+          <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.1rem;">
+            <span style="font-size:.62rem;font-family:'Open Sans',sans-serif;color:#2D05E2;background:rgba(45,5,226,.12);border:1px solid rgba(45,5,226,.25);padding:.2rem .6rem;border-radius:100px;">AI Training</span>
+            <span style="font-size:.62rem;font-family:'Open Sans',sans-serif;color:#BBBBBB;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.2rem .6rem;border-radius:100px;">Agentic AI</span>
+            <span style="font-size:.62rem;font-family:'Open Sans',sans-serif;color:#BBBBBB;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);padding:.2rem .6rem;border-radius:100px;">Promptly Pro</span>
+          </div>
+
+          <!-- Outcome highlight -->
+          <div style="display:flex;align-items:center;gap:.65rem;padding:.75rem 1rem;background:rgba(45,5,226,.08);border:1px solid rgba(45,5,226,.18);border-radius:10px;">
+            <svg width="16" height="16" fill="#2D05E2" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;color:#2D05E2;letter-spacing:.06em;text-transform:uppercase;">Outcome</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:.72rem;color:#fff;margin-top:.1rem;">Students equipped with real-world AI skills &amp; certified</div>
+            </div>
+          </div>
+
+          <!-- Score highlight -->
+          <div style="display:flex;align-items:flex-start;gap:.65rem;padding:.75rem 1rem;margin-top:.75rem;background:rgba(45,5,226,.05);border:1px solid rgba(45,5,226,.15);border-radius:10px;">
+            <svg width="16" height="16" fill="none" stroke="#2D05E2" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;margin-top:.1rem;"><path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div>
+              <div style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;color:#2D05E2;letter-spacing:.06em;text-transform:uppercase;">Exam Results</div>
+              <div style="font-family:'Open Sans',sans-serif;font-size:.72rem;color:#fff;margin-top:.1rem;line-height:1.6;">In last year exams students scored avg <strong style="color:#2D05E2;">98–99</strong> and few students scored <strong style="color:#fff;">100 out of 100</strong> in Artificial Intelligence subject.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /cards grid -->
+
+    <!-- Bottom CTA strip -->
+    <div class="sr" style="margin-top:3rem;padding:1.75rem 2rem;border-radius:16px;background:linear-gradient(135deg,rgba(210,14,7,.08),rgba(45,5,226,.08));border:1px solid rgba(255,255,255,.07);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.25rem;">
+      <div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:800;color:#fff;margin-bottom:.3rem;">Your Institution Could Be Next</div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.78rem;color:#BBBBBB;">Bring AI Champ's proven workshop curriculum to your school or college in 2026.</div>
+      </div>
+      <a href="#contact" style="display:inline-flex;align-items:center;gap:.5rem;padding:.75rem 1.5rem;background:linear-gradient(135deg,#D20E07,#a80b05);color:#fff;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:8px;text-decoration:none;transition:transform .2s ease,box-shadow .2s ease;box-shadow:0 4px 16px rgba(210,14,7,.35);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(210,14,7,.45)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 16px rgba(210,14,7,.35)'">
+        Partner With Us
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr-grad"></div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CONTACT / FOOTER
+═══════════════════════════════════════════════════ -->
+<section id="contact" style="position:relative;overflow:hidden;scroll-margin-top:120px;" class="dots-bg">
+
+  <!-- Background orbs -->
+  <div class="orb" style="--dur:10s;position:absolute;top:20%;left:10%;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.14),transparent 70%);filter:blur(48px);pointer-events:none;"></div>
+  <div class="orb" style="--dur:13s;position:absolute;bottom:15%;right:10%;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(45,5,226,.12),transparent 70%);filter:blur(48px);pointer-events:none;animation-direction:reverse;"></div>
+
+  <div style="position:relative;z-index:10;max-width:900px;margin:0 auto;padding:6rem 1.5rem 4rem;">
+
+    <!-- Header -->
+    <div class="sr" style="text-align:center;margin-bottom:3rem;">
+      <div class="pill" style="display:inline-block;padding:.3rem .9rem;border-radius:100px;margin-bottom:.75rem;">
+        <span style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#D20E07;letter-spacing:.16em;text-transform:uppercase;">Get in Touch</span>
+      </div>
+      <h2 style="font-family:'Montserrat',sans-serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:900;color:#fff;letter-spacing:-.03em;margin-bottom:.85rem;">Ready to Begin?</h2>
+      <p style="font-size:.9rem;line-height:1.75;color:#BBBBBB;max-width:520px;margin:0 auto;">
+        We are the industry experts excited to support AI Education. Join Eastern Kolkata's first AI Summer Workshop — benefiting students, schools, and society.
+      </p>
+    </div>
+
+    <!-- Contact image — full width showcase -->
+    <div class="card glow-border img-wrap sr-scale" style="border-radius:16px;overflow:hidden;margin-bottom:3rem;cursor:pointer;" onclick="openModal('m-contact')" role="button" tabindex="0" aria-label="View Thank You and Contact details">
+      <img src="Thank you & Contact.jpeg" alt="Thank You & Contact — AI Champ" style="width:100%;display:block;">
+    </div>
+
+    <!-- Contact cards -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;" class="sr">
+      <div style="padding:1.35rem;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.08);text-align:center;transition:border-color .25s ease;" onmouseover="this.style.borderColor='rgba(210,14,7,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        <div style="width:38px;height:38px;border-radius:50%;background:rgba(210,14,7,.18);display:flex;align-items:center;justify-content:center;margin:0 auto .85rem;">
+          <svg width="18" height="18" fill="#D20E07" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+        </div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:#fff;letter-spacing:.06em;margin-bottom:.5rem;">Address</div>
+        <div style="font-size:.7rem;line-height:1.65;color:#BBBBBB;">D04-412, Galleria<br>Newtown, Kolkata – 163</div>
+      </div>
+      <div style="padding:1.35rem;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.08);text-align:center;transition:border-color .25s ease;" onmouseover="this.style.borderColor='rgba(45,5,226,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        <div style="width:38px;height:38px;border-radius:50%;background:rgba(45,5,226,.18);display:flex;align-items:center;justify-content:center;margin:0 auto .85rem;">
+          <svg width="18" height="18" fill="#2D05E2" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:#fff;letter-spacing:.06em;margin-bottom:.5rem;">Phone</div>
+        <div style="font-size:.7rem;line-height:1.65;color:#BBBBBB;">9007035417 · 8697800333<br>7044047463 · 9874605700</div>
+      </div>
+      <div style="padding:1.35rem;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.08);text-align:center;transition:border-color .25s ease;" onmouseover="this.style.borderColor='rgba(210,14,7,.3)'" onmouseout="this.style.borderColor='rgba(255,255,255,.08)'">
+        <div style="width:38px;height:38px;border-radius:50%;background:rgba(210,14,7,.18);display:flex;align-items:center;justify-content:center;margin:0 auto .85rem;">
+          <svg width="18" height="18" fill="#D20E07" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+        </div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:#fff;letter-spacing:.06em;margin-bottom:.5rem;">Email</div>
+        <div style="font-size:.7rem;line-height:1.65;color:#BBBBBB;">aichampindia@gmail.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer bar -->
+  <div style="border-top:1px solid rgba(255,255,255,.07);padding:1.5rem;margin-top:0;">
+    <div style="max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
+      <div style="display:flex;align-items:center;gap:.85rem;">
+        <img src="Brand_Workshop/Brand Logo.jpg" alt="AI Champ" style="height:32px;width:auto;border-radius:2px;">
+        <span style="font-size:.72rem;color:#BBBBBB;font-family:'Open Sans',sans-serif;">AI Champ (AIC) — EduTech &amp; Consulting AI Startup, Kolkata</span>
+      </div>
+      <span style="font-size:.68rem;color:rgba(187,187,187,.4);font-family:'Open Sans',sans-serif;">© 2026 AI Champ. Empowering AI Education in India.</span>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════════
+     MODALS (8 total)
+═══════════════════════════════════════════════════ -->
+<div id="modal-backdrop" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.82);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:1rem;" onclick="if(event.target===this)closeAllModals()">
+
+  <!-- ══════════════════════════════════════════
+       CLAIM OFFER MODAL  (Early Bird)
+  ══════════════════════════════════════════ -->
+  <div id="m-claim" class="modal modal-box" style="position:relative;max-width:580px;width:100%;max-height:94vh;overflow-y:auto;overflow-x:hidden;border-radius:22px;border:1px solid rgba(210,14,7,.3);background:#0d0b14;display:none;box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(210,14,7,.12),0 0 60px rgba(210,14,7,.08);">
+
+    <!-- ── Hero header ── -->
+    <div style="position:relative;overflow:hidden;padding:2rem 2rem 1.5rem;background:linear-gradient(135deg,rgba(210,14,7,.18) 0%,rgba(45,5,226,.14) 100%);">
+
+      <!-- orb glows -->
+      <div style="position:absolute;top:-30px;left:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.35),transparent 70%);filter:blur(32px);pointer-events:none;"></div>
+      <div style="position:absolute;bottom:-20px;right:-20px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(45,5,226,.3),transparent 70%);filter:blur(28px);pointer-events:none;"></div>
+
+      <!-- animated top accent line -->
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#D20E07,#2D05E2,#D20E07);background-size:200% 100%;animation:eb-border-spin 2.5s linear infinite;"></div>
+
+      <!-- close btn -->
+      <button onclick="closeAllModals()" aria-label="Close" style="position:absolute;top:1rem;right:1rem;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;" onmouseover="this.style.background='#D20E07';this.style.transform='scale(1.1)'" onmouseleave="this.style.background='rgba(255,255,255,.1)';this.style.transform='scale(1)'">
+        <svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- badge row -->
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem;">
+        <span class="eb-blink" style="width:7px;height:7px;border-radius:50%;background:#D20E07;display:inline-block;flex-shrink:0;"></span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#D20E07;letter-spacing:.2em;text-transform:uppercase;">Limited Time · Early Bird 2026</span>
+      </div>
+
+      <!-- title + price row -->
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+        <div>
+          <h3 style="font-family:'Montserrat',sans-serif;font-size:1.55rem;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.1;margin-bottom:.4rem;">🎯 Claim Your<br>Early Bird Offer</h3>
+          <p style="font-family:'Open Sans',sans-serif;font-size:.75rem;color:rgba(187,187,187,.85);line-height:1.55;max-width:280px;">Fill in your details below and lock in your spot for the <strong style="color:#fff;">Summer AI Camp 2026</strong>.</p>
+        </div>
+        <!-- price pill -->
+        <div style="flex-shrink:0;text-align:center;background:rgba(0,0,0,.35);border:1px solid rgba(210,14,7,.4);border-radius:14px;padding:.7rem 1rem;">
+          <div style="font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:900;color:#fff;line-height:1;" class="eb-price">₹1299</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:.62rem;color:#888;text-decoration:line-through;margin-top:.1rem;">₹3499</div>
+          <div style="margin-top:.3rem;" class="eb-badge"><span style="background:#D20E07;color:#fff;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;padding:.2rem .55rem;border-radius:100px;letter-spacing:.06em;">63% OFF</span></div>
+        </div>
+      </div>
+
+      <!-- feature chips -->
+      <div style="display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem;">
+        <span style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#fff;background:rgba(210,14,7,.2);border:1px solid rgba(210,14,7,.3);padding:.25rem .65rem;border-radius:100px;">✓ Workshop Access</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#fff;background:rgba(45,5,226,.2);border:1px solid rgba(45,5,226,.3);padding:.25rem .65rem;border-radius:100px;">✓ AI Certificate</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#fff;background:rgba(210,14,7,.2);border:1px solid rgba(210,14,7,.3);padding:.25rem .65rem;border-radius:100px;">✓ Expert Mentoring</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#fff;background:rgba(45,5,226,.2);border:1px solid rgba(45,5,226,.3);padding:.25rem .65rem;border-radius:100px;">✓ Project Kit</span>
+      </div>
+    </div>
+
+    <!-- ── divider ── -->
+    <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(210,14,7,.4),rgba(45,5,226,.4),transparent);"></div>
+
+    <!-- ── Google Form section ── -->
+    <div style="padding:1.25rem 1.5rem 1.5rem;">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem;">
+        <svg width="15" height="15" fill="none" stroke="#D20E07" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6M9 16h6M7 4h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:#BBBBBB;letter-spacing:.08em;text-transform:uppercase;">Registration Form</span>
+      </div>
+
+      <div style="border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.07);">
+        <iframe
+          id="gform-iframe"
+          src="https://docs.google.com/forms/d/e/1FAIpQLScHOQhFJsmoFbbAh9s_vQxTAEedswr-ovTtUOhtnut3EpCX9A/viewform?usp=header"
+          width="100%"
+          height="530"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          style="display:block;background:#fff;">
+          Loading…
+        </iframe>
+      </div>
+
+      <!-- trust row -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.25rem;margin-top:.9rem;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:.3rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.5);">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Secure &amp; Private
+        </span>
+        <span style="display:flex;align-items:center;gap:.3rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.5);">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="10"/></svg>
+          No hidden fees
+        </span>
+        <span style="display:flex;align-items:center;gap:.3rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.5);">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Instant confirmation
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ENROLL NOW MODAL
+  ══════════════════════════════════════════ -->
+  <div id="m-enroll" class="modal modal-box" style="position:relative;max-width:560px;width:100%;max-height:94vh;overflow-y:auto;overflow-x:hidden;border-radius:22px;border:1px solid rgba(45,5,226,.3);background:#0b0d18;display:none;box-shadow:0 32px 80px rgba(0,0,0,.7),0 0 0 1px rgba(45,5,226,.1),0 0 60px rgba(45,5,226,.07);">
+
+    <!-- ── Hero header ── -->
+    <div style="position:relative;overflow:hidden;padding:2rem 2rem 1.5rem;background:linear-gradient(135deg,rgba(45,5,226,.2) 0%,rgba(210,14,7,.12) 100%);">
+
+      <!-- orb glows -->
+      <div style="position:absolute;top:-30px;right:-20px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(45,5,226,.4),transparent 70%);filter:blur(32px);pointer-events:none;"></div>
+      <div style="position:absolute;bottom:-20px;left:-20px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.25),transparent 70%);filter:blur(28px);pointer-events:none;"></div>
+
+      <!-- animated top accent line -->
+      <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#2D05E2,#D20E07,#2D05E2);background-size:200% 100%;animation:eb-border-spin 2.5s linear infinite;"></div>
+
+      <!-- close btn -->
+      <button onclick="closeAllModals()" aria-label="Close" style="position:absolute;top:1rem;right:1rem;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;" onmouseover="this.style.background='#2D05E2';this.style.transform='scale(1.1)'" onmouseleave="this.style.background='rgba(255,255,255,.1)';this.style.transform='scale(1)'">
+        <svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- icon + badge -->
+      <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.9rem;">
+        <div style="width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#2D05E2,#4a25f5);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(45,5,226,.4);flex-shrink:0;">
+          <svg width="22" height="22" fill="none" stroke="#fff" stroke-width="2" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM22 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#2D05E2;letter-spacing:.2em;text-transform:uppercase;margin-bottom:.15rem;">AI Champ · Summer Camp 2026</div>
+          <div style="font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:600;color:rgba(187,187,187,.7);">Eastern Kolkata's First AI Summer Workshop</div>
+        </div>
+      </div>
+
+      <!-- headline -->
+      <h3 style="font-family:'Montserrat',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.1;margin-bottom:.5rem;">
+        Thanks for your<br><span style="background:linear-gradient(90deg,#2D05E2,#D20E07);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Interest! 🙏</span>
+      </h3>
+      <p style="font-family:'Open Sans',sans-serif;font-size:.8rem;color:rgba(187,187,187,.85);line-height:1.6;max-width:360px;">Enter your <strong style="color:#fff;">Contact Number</strong> and <strong style="color:#fff;">Email</strong> — we will get back to you soon.</p>
+
+      <!-- highlights row -->
+      <div style="display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem;">
+        <span style="font-family:'Open Sans',sans-serif;font-size:.62rem;color:#fff;background:rgba(45,5,226,.22);border:1px solid rgba(45,5,226,.35);padding:.22rem .6rem;border-radius:100px;">🏆 Certifications</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.62rem;color:#fff;background:rgba(210,14,7,.18);border:1px solid rgba(210,14,7,.3);padding:.22rem .6rem;border-radius:100px;">🤖 AI Projects</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.62rem;color:#fff;background:rgba(45,5,226,.22);border:1px solid rgba(45,5,226,.35);padding:.22rem .6rem;border-radius:100px;">👨‍🏫 20+ Experts</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.62rem;color:#fff;background:rgba(210,14,7,.18);border:1px solid rgba(210,14,7,.3);padding:.22rem .6rem;border-radius:100px;">📅 May 1–17</span>
+      </div>
+    </div>
+
+    <!-- ── divider ── -->
+    <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(45,5,226,.4),rgba(210,14,7,.3),transparent);"></div>
+
+    <!-- ── Google Form section ── -->
+    <div style="padding:1.25rem 1.5rem 1.5rem;">
+      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem;">
+        <svg width="15" height="15" fill="none" stroke="#2D05E2" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6M9 16h6M7 4h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:#BBBBBB;letter-spacing:.08em;text-transform:uppercase;">Quick Enquiry Form</span>
+        <span style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.45);margin-left:auto;">Takes &lt;1 minute</span>
+      </div>
+
+      <div style="border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.07);">
+        <iframe
+          src="https://docs.google.com/forms/d/e/1FAIpQLScH9feF2CTzopMnJgdPg5vnpaZ8hsk0gEEOp6cCZU-hHQnF3A/viewform?usp=header"
+          width="100%"
+          height="360"
+          frameborder="0"
+          marginheight="0"
+          marginwidth="0"
+          style="display:block;background:#fff;">
+          Loading…
+        </iframe>
+      </div>
+
+      <!-- trust row -->
+      <div style="display:flex;align-items:center;justify-content:center;gap:1.25rem;margin-top:.9rem;flex-wrap:wrap;">
+        <span style="display:flex;align-items:center;gap:.3rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.5);">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          100% Secure
+        </span>
+        <span style="display:flex;align-items:center;gap:.3rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.5);">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          We'll call you back
+        </span>
+        <span style="display:flex;align-items:center;gap:.3rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(187,187,187,.5);">
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 14l-4-4h3V8h2v4h3l-4 4z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          No spam ever
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- About — dual image slideshow with flash transition -->
+  <div id="m-about" class="modal modal-box" style="position:relative;max-width:820px;width:100%;max-height:92vh;overflow:hidden;border-radius:20px;border:1px solid rgba(255,255,255,.1);background:#000;display:none;box-shadow:0 40px 100px rgba(0,0,0,.85),0 0 0 1px rgba(210,14,7,.12);">
+
+    <!-- Close -->
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:30;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease,transform .2s ease;" onmouseover="this.style.background='#D20E07';this.style.transform='scale(1.1)'" onmouseleave="this.style.background='rgba(0,0,0,.6)';this.style.transform='scale(1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+
+    <!-- Slide container -->
+    <div id="about-slides" style="position:relative;width:100%;background:#000;">
+
+      <!-- Slide 1: About AI Champ -->
+      <div class="about-slide" id="aslide-0" style="display:block;">
+        <img src="About AI Champ.jpeg" alt="About AI Champ" style="width:100%;height:auto;max-height:86vh;display:block;object-fit:contain;border-radius:20px;">
+      </div>
+
+      <!-- Slide 2: Why AI Champ -->
+      <div class="about-slide" id="aslide-1" style="display:none;">
+        <img src="Why AI Champ.jpeg" alt="Why AI Champ" style="width:100%;height:auto;max-height:86vh;display:block;object-fit:contain;border-radius:20px;">
+      </div>
+
+      <!-- Flash overlay -->
+      <div id="about-flash" style="position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;border-radius:20px;"></div>
+
+      <!-- Slide indicators -->
+      <div style="position:absolute;bottom:.85rem;left:50%;transform:translateX(-50%);display:flex;gap:.5rem;z-index:10;">
+        <span id="adot-0" style="width:8px;height:8px;border-radius:50%;background:#D20E07;display:block;transition:background .3s;"></span>
+        <span id="adot-1" style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);display:block;transition:background .3s;"></span>
+      </div>
+
+      <!-- Slide label -->
+      <div id="about-label" style="position:absolute;top:.9rem;left:1rem;z-index:10;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);padding:.25rem .7rem;border-radius:100px;border:1px solid rgba(255,255,255,.12);">
+        <span id="about-label-txt" style="font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase;">About AI Champ</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Why -->
+  <div id="m-why" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="Why AI Champ.jpeg" alt="Why AI Champ" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- Workshop -->
+  <div id="m-workshop" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="WORKSHOP 1.jpeg" alt="Workshop 1" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- Benefits -->
+  <div id="m-benefits" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="Student Benefits.jpeg" alt="Student Benefits" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- Agentic -->
+  <div id="m-agentic" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="Agentic Way Workshop.jpeg" alt="Agentic Way Workshop" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- AI Agent -->
+  <div id="m-agent" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="What is an AI Agent.jpeg" alt="What is an AI Agent" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- Promptly Pro -->
+  <div id="m-promptly" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="Why Promptly Pro.jpeg" alt="Why Promptly Pro" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- Think Agentic -->
+  <div id="m-think" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="Why think in an agentic way.jpeg" alt="Why Think in an Agentic Way" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+  <!-- Contact -->
+  <div id="m-contact" class="modal modal-box" style="position:relative;max-width:680px;width:100%;max-height:90vh;overflow:auto;border-radius:16px;border:1px solid rgba(255,255,255,.1);background:#111;display:none;">
+    <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
+      <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+    <img src="Thank you & Contact.jpeg" alt="Thank You & Contact" style="width:100%;display:block;border-radius:16px;">
+  </div>
+
+</div><!-- /modal-backdrop -->
+
+
+<!-- ═══════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════ -->
+<script>
+  /* ── Scroll reveal ── */
+  const revealObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.sr, .sr-left, .sr-right, .sr-scale').forEach(el => revealObs.observe(el));
+
+  /* ── About Slideshow ── */
+  const ABOUT_SLIDES  = ['aslide-0','aslide-1'];
+  const ABOUT_LABELS  = ['About AI Champ','Why AI Champ?'];
+  let aboutCurrent    = 0;
+  let aboutTimer      = null;
+
+  function aboutSlideshowStop() {
+    if (aboutTimer) { clearInterval(aboutTimer); aboutTimer = null; }
+  }
+
+  function aboutSlideshowStart() {
+    aboutSlideshowStop();
+    aboutCurrent = 0;
+    // show first slide immediately
+    ABOUT_SLIDES.forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = i === 0 ? 'block' : 'none';
+    });
+    const dot0 = document.getElementById('adot-0');
+    const dot1 = document.getElementById('adot-1');
+    if (dot0) dot0.style.background = '#D20E07';
+    if (dot1) dot1.style.background = 'rgba(255,255,255,.3)';
+    const lbl = document.getElementById('about-label-txt');
+    if (lbl) lbl.textContent = ABOUT_LABELS[0];
+
+    aboutTimer = setInterval(function() {
+      const flash   = document.getElementById('about-flash');
+      const nextIdx = (aboutCurrent + 1) % ABOUT_SLIDES.length;
+
+      // fire flash overlay
+      if (flash) {
+        flash.style.animation = 'none';
+        void flash.offsetWidth;
+        flash.style.animation = 'about-flash 0.45s ease forwards';
+      }
+
+      // swap slide after half the flash
+      setTimeout(function() {
+        ABOUT_SLIDES.forEach((id, i) => {
+          const el = document.getElementById(id);
+          if (el) el.style.display = i === nextIdx ? 'block' : 'none';
+        });
+        aboutCurrent = nextIdx;
+        // update dots
+        if (dot0) dot0.style.background = nextIdx === 0 ? '#D20E07' : 'rgba(255,255,255,.3)';
+        if (dot1) dot1.style.background = nextIdx === 1 ? '#D20E07' : 'rgba(255,255,255,.3)';
+        if (lbl) lbl.textContent = ABOUT_LABELS[nextIdx];
+      }, 150);
+    }, 3200);
+  }
+
+  /* ── Modals ── */
+  const backdrop = document.getElementById('modal-backdrop');
+
+  function openModal(id) {
+    // hide all first
+    document.querySelectorAll('#modal-backdrop .modal').forEach(m => {
+      m.style.display = 'none';
+      m.classList.remove('open');
+    });
+    const el = document.getElementById(id);
+    if (!el) return;
+    backdrop.style.display = 'flex';
+    el.style.display = 'block';
+    // About slideshow — reset & start on each open
+    if (id === 'm-about') {
+      aboutSlideshowStart();
+      // attach hover pause only once
+      const slidesEl = document.getElementById('about-slides');
+      if (slidesEl && !slidesEl._hoverBound) {
+        slidesEl._hoverBound = true;
+        slidesEl.addEventListener('mouseenter', function() {
+          aboutSlideshowStop();
+          // freeze flash mid-animation
+          const flash = document.getElementById('about-flash');
+          if (flash) { flash.style.animation = 'none'; flash.style.opacity = 0; }
+        });
+        slidesEl.addEventListener('mouseleave', function() {
+          aboutSlideshowStart();
+        });
+      }
+    }
+    // force reflow before adding open class
+    void el.offsetWidth;
+    el.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAllModals() {
+    aboutSlideshowStop();
+    document.querySelectorAll('#modal-backdrop .modal').forEach(m => {
+      m.classList.remove('open');
+    });
+    setTimeout(() => {
+      backdrop.style.display = 'none';
+      document.querySelectorAll('#modal-backdrop .modal').forEach(m => { m.style.display = 'none'; });
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeAllModals();
+  });
+
+  // Keyboard accessibility for card buttons
+  document.querySelectorAll('[role="button"]').forEach(el => {
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
+</script>
+
+<script>
+  /* Sequential blink for curriculum images */
+  (function(){
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.curr-card'));
+    if (!cards.length) return;
+    var current = 0;
+
+    function activate(idx) {
+      cards.forEach(function(c, i) {
+        c.classList.remove('curr-active', 'curr-dim');
+        if (i === idx) {
+          c.classList.add('curr-active');
+        } else {
+          c.classList.add('curr-dim');
+        }
+      });
+      current = idx;
+    }
+
+    // Start after a short delay so scroll-reveal has settled
+    setTimeout(function(){
+      activate(0);
+      setInterval(function(){
+        activate((current + 1) % cards.length);
+      }, 2200);
+    }, 800);
+  })();
+</script>
+
+
+<script>
+  /* Hide welcome ticker once user scrolls past the contact/enroll section */
+  (function(){
+    var ticker  = document.getElementById('welcome-ticker');
+    var contact = document.getElementById('contact');
+    if (!ticker || !contact) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        /* when the contact section EXITS the viewport (scrolled past), hide ticker */
+        if (!e.isIntersecting && e.boundingClientRect.top < 0) {
+          ticker.classList.add('hidden');
+        } else {
+          ticker.classList.remove('hidden');
+        }
+      });
+    }, { threshold: 0 });
+    io.observe(contact);
+  })();
+
+  /* ── Nav precision scroll with highlight ── */
+  window.navScrollTo = function(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+
+    // For sticky elements (curriculum/about sidebars) scrollIntoView is unreliable.
+    // Calculate the element's absolute top position on the page and scroll there directly.
+    var OFFSET = id === 'curriculum' ? 420 : 120; // curriculum clears EB card (fixed ~415px from top)
+    var rect = el.getBoundingClientRect();
+    var absoluteTop = rect.top + window.pageYOffset - OFFSET;
+
+    window.scrollTo({ top: absoluteTop, behavior: 'smooth' });
+
+    // flash highlight after scroll settles
+    setTimeout(function() {
+      el.classList.remove('nav-flash');
+      void el.offsetWidth;
+      el.classList.add('nav-flash');
+      el.addEventListener('animationend', function onEnd() {
+        el.classList.remove('nav-flash');
+        el.removeEventListener('animationend', onEnd);
+      });
+    }, 600);
+  };
+</script>
+
+
+<!-- ═══════════════════════════════════════════════════
+     ARUSHI — AI CHAMP CHATBOT
+═══════════════════════════════════════════════════ -->
+<style>
+  /* ── Chatbot widget ── */
+  :root {
+    --og: #f97316;   /* Orange */
+    --og-d: #c2570d; /* Orange dark */
+    --og-l: #fed7aa; /* Orange light */
+  }
+
+  /* Launcher wrapper */
+  #arushi-launcher {
+    position: fixed; bottom: 1.75rem; right: 1.75rem; z-index: 8000;
+    display: flex; flex-direction: column; align-items: center; gap: .45rem;
+  }
+
+  /* "Chat Support" blinking label */
+  #chat-support-label {
+    background: #000;
+    border: 1.5px solid var(--og);
+    color: var(--og-l);
+    font-family: 'Montserrat', sans-serif; font-size: .6rem; font-weight: 800;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: .22rem .7rem; border-radius: 100px;
+    white-space: nowrap;
+    animation: cs-blink 1.4s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(11,170,110,.3);
+    transition: color .25s ease, background .25s ease, box-shadow .25s ease, animation-play-state .1s;
+    cursor: pointer;
+  }
+  @keyframes cs-blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: .25; }
+  }
+  /* stopped state — applied via JS class */
+  #chat-support-label.cs-open {
+    animation-play-state: paused;
+    opacity: 1;
+  }
+  #chat-support-label.cs-open:hover {
+    background: var(--og);
+    color: #000;
+    box-shadow: 0 0 18px rgba(11,170,110,.55);
+  }
+
+  /* Circle button */
+  #arushi-btn {
+    width: 62px; height: 62px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #1a1a1a, #000);
+    border: 2.5px solid var(--og);
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(11,170,110,.5), 0 6px 24px rgba(0,0,0,.55);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .25s cubic-bezier(.16,1,.3,1), box-shadow .25s ease;
+    animation: arushi-pulse 2.6s ease-in-out infinite;
+    position: relative;
+  }
+  #arushi-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 0 rgba(11,170,110,0), 0 10px 32px rgba(11,170,110,.45);
+  }
+  @keyframes arushi-pulse {
+    0%,100% { box-shadow: 0 0 0 0   rgba(11,170,110,.6), 0 6px 24px rgba(0,0,0,.55); }
+    50%      { box-shadow: 0 0 0 12px rgba(11,170,110,0), 0 6px 24px rgba(0,0,0,.55); }
+  }
+
+  /* Online dot */
+  #arushi-badge {
+    position: absolute; top: 0px; right: 0px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--og); border: 2px solid #000;
+    animation: arushi-blink-dot 2s ease-in-out infinite;
+  }
+  @keyframes arushi-blink-dot {
+    0%,100% { opacity: 1; } 50% { opacity: .35; }
+  }
+
+  #arushi-window {
+    position: fixed; bottom: 5.5rem; right: 1.75rem; z-index: 8000;
+    width: 360px; max-width: calc(100vw - 2rem);
+    border-radius: 20px; overflow: hidden;
+    background: #111017;
+    border: 1px solid rgba(255,255,255,.1);
+    box-shadow: 0 32px 80px rgba(0,0,0,.75), 0 0 0 1px rgba(210,14,7,.12);
+    display: none; flex-direction: column;
+    transform: scale(.92) translateY(16px); opacity: 0;
+    transition: transform .35s cubic-bezier(.16,1,.3,1), opacity .3s ease;
+  }
+  #arushi-window.aw-open { display: flex; }
+  #arushi-window.aw-visible { transform: scale(1) translateY(0); opacity: 1; }
+
+  /* Header */
+  #aw-header {
+    background: linear-gradient(135deg, rgba(210,14,7,.25), rgba(45,5,226,.2));
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    padding: .85rem 1rem;
+    display: flex; align-items: center; gap: .75rem; flex-shrink: 0;
+  }
+  #aw-avatar {
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, #D20E07, #2D05E2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-size: 1rem; font-weight: 900; color: #fff;
+    position: relative;
+  }
+  #aw-avatar::after {
+    content: ''; position: absolute; bottom: 1px; right: 1px;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #22c55e; border: 2px solid #111017;
+  }
+  .aw-hname { font-family: 'Montserrat', sans-serif; font-size: .85rem; font-weight: 800; color: #fff; }
+  .aw-hsub  { font-family: 'Open Sans', sans-serif; font-size: .62rem; color: #22c55e; margin-top: .05rem; }
+  #aw-close {
+    margin-left: auto; width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(255,255,255,.08); border: none; cursor: pointer; color: #fff;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    transition: background .2s ease;
+  }
+  #aw-close:hover { background: #D20E07; }
+
+  /* Messages */
+  #aw-messages {
+    flex: 1; overflow-y: auto; padding: 1rem;
+    display: flex; flex-direction: column; gap: .65rem;
+    max-height: 340px; min-height: 200px;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.1) transparent;
+  }
+  #aw-messages::-webkit-scrollbar { width: 4px; }
+  #aw-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,.12); border-radius: 4px; }
+
+  .aw-msg { display: flex; gap: .5rem; align-items: flex-end; }
+  .aw-msg.bot { flex-direction: row; }
+  .aw-msg.user { flex-direction: row-reverse; }
+
+  .aw-bubble {
+    max-width: 78%; padding: .6rem .85rem;
+    font-family: 'Open Sans', sans-serif; font-size: .73rem; line-height: 1.6; color: #fff;
+    border-radius: 16px; word-break: break-word;
+    animation: aw-pop .28s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes aw-pop {
+    from { opacity: 0; transform: scale(.88) translateY(6px); }
+    to   { opacity: 1; transform: scale(1)   translateY(0); }
+  }
+  .aw-msg.bot  .aw-bubble { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); border-bottom-left-radius: 4px; }
+  .aw-msg.user .aw-bubble { background: linear-gradient(135deg,#D20E07,#a80b05); border-bottom-right-radius: 4px; }
+
+  .aw-bot-icon {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; margin-bottom: 2px;
+    background: linear-gradient(135deg,#D20E07,#2D05E2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif; font-size: .6rem; font-weight: 900; color: #fff;
+  }
+
+  /* Typing indicator */
+  .aw-typing .aw-bubble {
+    display: flex; gap: 4px; align-items: center; padding: .65rem .85rem;
+  }
+  .aw-dot { width: 6px; height: 6px; border-radius: 50%; background: #BBBBBB; animation: aw-tdot 1.2s ease-in-out infinite; }
+  .aw-dot:nth-child(2) { animation-delay: .2s; }
+  .aw-dot:nth-child(3) { animation-delay: .4s; }
+  @keyframes aw-tdot {
+    0%,80%,100% { transform: translateY(0); opacity: .5; }
+    40%          { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* Quick replies */
+  #aw-quick { padding: .5rem 1rem; display: flex; flex-wrap: wrap; gap: .4rem; border-top: 1px solid rgba(255,255,255,.05); flex-shrink: 0; }
+  .aw-qbtn {
+    padding: .32rem .7rem; border-radius: 100px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.12);
+    font-family: 'Open Sans', sans-serif; font-size: .65rem; color: #BBBBBB; cursor: pointer;
+    transition: background .2s ease, color .2s ease, border-color .2s ease;
+    white-space: nowrap;
+  }
+  .aw-qbtn:hover { background: rgba(210,14,7,.18); border-color: rgba(210,14,7,.4); color: #fff; }
+
+  /* Input row */
+  #aw-footer {
+    padding: .65rem .75rem; border-top: 1px solid rgba(255,255,255,.07);
+    display: flex; gap: .5rem; align-items: center; flex-shrink: 0;
+  }
+  #aw-input {
+    flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+    border-radius: 100px; padding: .5rem .9rem;
+    font-family: 'Open Sans', sans-serif; font-size: .73rem; color: #fff; outline: none;
+    transition: border-color .2s ease;
+  }
+  #aw-input::placeholder { color: rgba(187,187,187,.45); }
+  #aw-input:focus { border-color: rgba(210,14,7,.5); }
+  #aw-send {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg,#D20E07,#a80b05); border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .2s ease, box-shadow .2s ease;
+    box-shadow: 0 3px 12px rgba(210,14,7,.4);
+  }
+  #aw-send:hover { transform: scale(1.1); box-shadow: 0 5px 18px rgba(210,14,7,.55); }
+
+  /* hide old notif — replaced by label */
+  #arushi-notif { display: none !important; }
+</style>
+
+<!-- Launcher button -->
+<div id="arushi-launcher">
+  <!-- Blinking "Chat Support" label -->
+  <span id="chat-support-label" onclick="arushiToggle()">Chat Support</span>
+  <!-- Circle button -->
+  <button id="arushi-btn" aria-label="Chat with Arushi" onclick="arushiToggle()">
+    <div id="arushi-badge"></div>
+    <!-- Bot icon — ocean green + white on black -->
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+      <rect x="3" y="7" width="18" height="13" rx="3" ry="3" stroke="#f97316" stroke-linecap="round"/>
+      <path d="M9 11h.01M15 11h.01" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M9 15s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#fed7aa" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 7V4M9 4h6" stroke="#f97316" stroke-linecap="round"/>
+    </svg>
+  </button>
+</div>
+<!-- keep hidden notif div for JS compat -->
+<div id="arushi-notif" style="display:none;"></div>
+
+<!-- Chat window -->
+<div id="arushi-window">
+
+  <!-- Header -->
+  <div id="aw-header">
+    <div id="aw-avatar">A</div>
+    <div>
+      <div class="aw-hname">Arushi &nbsp;✦&nbsp; AI Champ</div>
+      <div class="aw-hsub">● Online &nbsp;·&nbsp; Typically replies instantly</div>
+    </div>
+    <button id="aw-close" aria-label="Close chat" onclick="arushiToggle()">
+      <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <!-- Messages -->
+  <div id="aw-messages"></div>
+
+  <!-- Quick replies -->
+  <div id="aw-quick">
+    <button class="aw-qbtn" onclick="arushiAsk('Workshop details')">🎓 Workshop details</button>
+    <button class="aw-qbtn" onclick="arushiAsk('Contact numbers')">📞 Contact</button>
+    <button class="aw-qbtn" onclick="arushiAsk('Email')">📧 Email</button>
+    <button class="aw-qbtn" onclick="arushiAsk('Fees and pricing')">💰 Fees</button>
+    <button class="aw-qbtn" onclick="arushiAsk('Curriculum topics')">📚 Curriculum</button>
+    <button class="aw-qbtn" onclick="arushiAsk('Who can join')">👨‍🎓 Eligibility</button>
+    <button class="aw-qbtn" onclick="arushiAsk('How to enroll')">✅ Enroll</button>
+    <button class="aw-qbtn" onclick="arushiAsk('About AI Champ')">ℹ️ About us</button>
+  </div>
+
+  <!-- Input -->
+  <div id="aw-footer">
+    <input id="aw-input" type="text" placeholder="Type your question…" autocomplete="off"
+      onkeydown="if(event.key==='Enter')arushiSend()">
+    <button id="aw-send" aria-label="Send" onclick="arushiSend()">
+      <svg width="15" height="15" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  /* ── Data ── */
+  var PHONES = ['9007035417', '8697800333', '7044047463', '9874605700'];
+  var EMAIL  = 'aichampindia@gmail.com';
+
+  /* ── Greeting ── */
+  function timeGreeting() {
+    var h = new Date().getHours();
+    if (h < 12) return 'Good Morning';
+    if (h < 17) return 'Good Afternoon';
+    return 'Good Evening';
+  }
+
+  /* ── Knowledge base ── */
+  var KB = [
+    {
+      keys: ['contact','phone','number','call','mobile','reach'],
+      ans: '📞 <strong>AI Champ Contact Numbers:</strong><br>' +
+           PHONES.map(function(p){ return '<a href="tel:+91'+p+'" style="color:#D20E07;font-weight:700;">'+p+'</a>'; }).join(' &nbsp;·&nbsp; ') +
+           '<br><br>You can call any of these numbers between <strong>10 AM – 7 PM</strong>, Monday to Saturday.'
+    },
+    {
+      keys: ['email','mail','gmail','write'],
+      ans: '📧 <strong>Email us at:</strong><br>' +
+           '<a href="mailto:'+EMAIL+'" style="color:#D20E07;font-weight:700;">'+EMAIL+'</a>' +
+           '<br><br>We typically respond within <strong>24 hours</strong>. You\'re also welcome to use the <em>Enroll Now</em> form on our website!'
+    },
+    {
+      keys: ['fee','price','cost','pricing','charge','payment','rupee','₹','1299','3499','early bird','offer','discount'],
+      ans: '💰 <strong>Workshop Fee:</strong><br>' +
+           '<span style="font-size:.9em;color:#BBBBBB;text-decoration:line-through;">₹3499</span> &nbsp;→&nbsp; <strong style="color:#D20E07;font-size:1.05em;">₹1299</strong> &nbsp;<span style="background:#D20E07;color:#fff;padding:.1rem .4rem;border-radius:100px;font-size:.75em;font-weight:800;">63% OFF</span><br><br>' +
+           'This is our <strong>Early Bird Offer</strong> for 2026. Click the blinking card on the top-right of the page to <strong>Claim Your Offer</strong> before seats fill up!'
+    },
+    {
+      keys: ['curriculum','topic','learn','syllabus','subject','what will','teach','content','module'],
+      ans: '📚 <strong>Summer AI Camp Curriculum includes:</strong><br>' +
+           '• 🤖 What is an AI Agent?<br>' +
+           '• ⚡ Agentic Way of Thinking<br>' +
+           '• 🛠️ Why Promptly Pro?<br>' +
+           '• 🐍 Python Programming<br>' +
+           '• 🧠 AI Fundamentals & Usage<br>' +
+           '• 🌐 Real-world AI Projects & Case Studies<br><br>' +
+           'Click <strong>Curriculum</strong> in the top navigation to explore the full details!'
+    },
+    {
+      keys: ['workshop','summer camp','summer ai','programme','program','training','certification','certif'],
+      ans: '🎓 <strong>AI Champ Summer AI Camp 2026:</strong><br>' +
+           '📅 <strong>Dates:</strong> May 1 – 17, 2026<br>' +
+           '📍 <strong>Location:</strong> Eastern Kolkata<br>' +
+           '🏫 <strong>Partner:</strong> Indian Institute of Packaging (IIP)<br>' +
+           '👨‍🏫 <strong>Mentors:</strong> 20+ Industry Experts<br>' +
+           '🏆 <strong>Outcome:</strong> Certification + Real-world Projects + Innovation Awards<br><br>' +
+           'It\'s Eastern Kolkata\'s <strong>first AI Summer Workshop</strong> — a once-in-a-lifetime opportunity for students!'
+    },
+    {
+      keys: ['who can','eligible','eligibility','age','school','college','student','class','grade'],
+      ans: '👨‍🎓 <strong>Who can join?</strong><br>' +
+           'AI Champ\'s Summer Camp is open to <strong>School and College Students</strong> across Kolkata.<br><br>' +
+           'No prior coding or AI experience is needed — our curriculum is designed to take you from zero to building real AI agents!'
+    },
+    {
+      keys: ['enroll','register','join','sign up','apply','book','seat','admission'],
+      ans: '✅ <strong>How to Enroll:</strong><br>' +
+           '1. Click the <strong>"Enroll Now"</strong> button in the top navigation bar.<br>' +
+           '2. Fill in your Contact Number and Email.<br>' +
+           '3. Our team will call you back to confirm your seat!<br><br>' +
+           'Or claim the <strong>Early Bird Offer (₹1299)</strong> using the blinking card at the top-right of the page. Hurry — seats are limited!'
+    },
+    {
+      keys: ['about','who are','ai champ','what is ai champ','founded','startup','company'],
+      ans: 'ℹ️ <strong>About AI Champ (AIC):</strong><br>' +
+           'AI Champ is Kolkata\'s pioneering <strong>EduTech & Consulting AI Startup</strong>, delivering world-class AI workshops, certifications, and mentoring for students.<br><br>' +
+           '🏆 <strong>Track record:</strong> 95.8% average scores at Rammohon College &amp; Indian Institute of Packaging (IIP), 2025.<br>' +
+           '👩‍🏫 <strong>20+ industry expert</strong> mentors across our programmes.'
+    },
+    {
+      keys: ['success','result','score','past','previous','history','iip','city college','rammohon'],
+      ans: '🌟 <strong>AI Champ Success Stories (2025):</strong><br>' +
+           '🏛️ <strong>Indian Institute of Packaging (IIP):</strong> 95.8% class average · IIT Packaging partner certification.<br>' +
+           '🎓 <strong>City College, Kolkata:</strong> Students scored avg <strong>98–99</strong> in AI subject; some scored <strong>100/100</strong>!<br><br>' +
+           'AI Champ has served <strong>5+ institutions</strong> and delivered <strong>15+ programmes</strong> across Kolkata.'
+    },
+    {
+      keys: ['date','when','schedule','timing','time','start','end','duration','how long','days'],
+      ans: '📅 <strong>Workshop Schedule:</strong><br>' +
+           '• <strong>Dates:</strong> May 1 – 17, 2026<br>' +
+           '• <strong>Duration:</strong> 17 days of intensive training<br>' +
+           '• <strong>Location:</strong> Eastern Kolkata<br><br>' +
+           'Specific timing and venue details will be shared after enrollment. Contact us at <strong>9007035417</strong> for more info!'
+    },
+    {
+      keys: ['hello','hi','hey','hii','helo','namaste','good morning','good afternoon','good evening'],
+      ans: null  // handled dynamically
+    },
+    {
+      keys: ['thank','thanks','okay','ok','great','awesome','nice','cool','perfect','bye','goodbye'],
+      ans: '😊 You\'re welcome! Is there anything else I can help you with about <strong>AI Champ\'s Summer AI Camp 2026</strong>?'
+    }
+  ];
+
+  /* ── DOM refs ── */
+  var win      = document.getElementById('arushi-window');
+  var msgs     = document.getElementById('aw-messages');
+  var input    = document.getElementById('aw-input');
+  var notif    = document.getElementById('arushi-notif');
+  var isOpen   = false;
+  var greeted  = false;
+
+  var csLabel = document.getElementById('chat-support-label');
+
+  /* ── Toggle ── */
+  window.arushiToggle = function() {
+    if (!isOpen) {
+      // stop blinking — switch to hover-ready state
+      if (csLabel) csLabel.classList.add('cs-open');
+      win.classList.add('aw-open');
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          win.classList.add('aw-visible');
+        });
+      });
+      isOpen = true;
+      if (!greeted) {
+        greeted = true;
+        setTimeout(function(){ botTypeThen(
+          '👋 <strong>' + timeGreeting() + '!</strong> I\'m <strong>Arushi</strong>, your AI Champ assistant.<br><br>' +
+          'How can I help you today? You can ask me about our <strong>Summer AI Camp 2026</strong>, fees, curriculum, enrollment, or contact details!'
+        , 600); }, 300);
+      }
+    } else {
+      // resume blinking when chat closes
+      if (csLabel) csLabel.classList.remove('cs-open');
+      win.classList.remove('aw-visible');
+      setTimeout(function(){ win.classList.remove('aw-open'); }, 350);
+      isOpen = false;
+    }
+  };
+
+  /* ── Public ask (quick replies) ── */
+  window.arushiAsk = function(q) {
+    addMsg(q, 'user');
+    input.value = '';
+    processQuery(q.toLowerCase());
+  };
+
+  /* ── Send from input ── */
+  window.arushiSend = function() {
+    var q = input.value.trim();
+    if (!q) return;
+    addMsg(q, 'user');
+    input.value = '';
+    processQuery(q.toLowerCase());
+  };
+
+  /* ── Add message bubble ── */
+  function addMsg(html, who) {
+    var row = document.createElement('div');
+    row.className = 'aw-msg ' + who;
+    if (who === 'bot') {
+      row.innerHTML = '<div class="aw-bot-icon">A</div><div class="aw-bubble">' + html + '</div>';
+    } else {
+      row.innerHTML = '<div class="aw-bubble">' + escHtml(html) + '</div>';
+    }
+    msgs.appendChild(row);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  /* ── Typing indicator then reply ── */
+  function botTypeThen(html, delay) {
+    delay = delay || 800;
+    // show typing
+    var typo = document.createElement('div');
+    typo.className = 'aw-msg bot aw-typing';
+    typo.innerHTML = '<div class="aw-bot-icon">A</div><div class="aw-bubble"><span class="aw-dot"></span><span class="aw-dot"></span><span class="aw-dot"></span></div>';
+    msgs.appendChild(typo);
+    msgs.scrollTop = msgs.scrollHeight;
+    setTimeout(function(){
+      msgs.removeChild(typo);
+      addMsg(html, 'bot');
+    }, delay);
+  }
+
+  /* ── Match query to KB ── */
+  function processQuery(q) {
+    // greeting special case
+    var greetKeys = ['hello','hi','hey','hii','helo','namaste','good morning','good afternoon','good evening'];
+    for (var gi = 0; gi < greetKeys.length; gi++) {
+      if (q.indexOf(greetKeys[gi]) !== -1) {
+        botTypeThen('👋 <strong>' + timeGreeting() + '!</strong> I\'m Arushi from AI Champ. How can I help you today?<br><br>Feel free to ask about our workshop, fees, curriculum, or how to enroll!');
+        return;
+      }
+    }
+    // scan KB
+    for (var i = 0; i < KB.length; i++) {
+      var entry = KB[i];
+      for (var k = 0; k < entry.keys.length; k++) {
+        if (q.indexOf(entry.keys[k]) !== -1 && entry.ans) {
+          botTypeThen(entry.ans);
+          return;
+        }
+      }
+    }
+    // fallback
+    botTypeThen(
+      'I\'m not sure I have that answer right now. 😊<br><br>' +
+      'You can reach our team directly:<br>' +
+      '📞 <strong>9007035417 / 8697800333</strong><br>' +
+      '📧 <a href="mailto:aichampindia@gmail.com" style="color:#D20E07;">aichampindia@gmail.com</a><br><br>' +
+      'Or try one of the quick reply buttons below!'
+    );
+  }
+
+  function escHtml(t) {
+    return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── Show notif bubble after 3s ── */
+  setTimeout(function(){
+    if (!isOpen && notif) { notif.style.display = 'block'; }
+  }, 3000);
+
+})();
+</script>
+</body>
+</html>
