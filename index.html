@@ -990,137 +990,29 @@
       </p>
     </div>
 
-    <!-- 16:9 Video wrapper -->
-    <div class="sr" id="promo-video-wrap" style="
+    <!-- 16:9 Video wrapper — Google Drive embed -->
+    <div class="sr" style="
       position:relative;
       width:100%;
-      padding-bottom:56.25%; /* 16:9 */
+      padding-bottom:56.25%;
       border-radius:20px;
       overflow:hidden;
       border:1.5px solid rgba(210,14,7,.3);
       box-shadow:0 24px 72px rgba(0,0,0,.65),0 0 0 1px rgba(210,14,7,.08);
       background:#000;
-      cursor:pointer;
     ">
-
-      <!-- Video element -->
-      <video
-        id="promo-video"
-        src="AICI Workshop Promo_Arushi.mp4"
-        preload="metadata"
-        playsinline
-        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:20px;display:block;"
-      ></video>
-
-      <!-- Dark overlay (hides when playing) -->
-      <div id="promo-overlay" style="
-        position:absolute;inset:0;
-        background:linear-gradient(to top,rgba(0,0,0,.72) 0%,rgba(0,0,0,.25) 50%,rgba(0,0,0,.45) 100%);
-        border-radius:20px;
-        transition:opacity .35s ease;
-        pointer-events:none;
-      "></div>
-
-      <!-- Big play button (center) -->
-      <div id="promo-playbtn" style="
-        position:absolute;top:50%;left:50%;
-        transform:translate(-50%,-50%);
-        width:72px;height:72px;border-radius:50%;
-        background:rgba(210,14,7,.92);
-        border:3px solid rgba(255,255,255,.3);
-        display:flex;align-items:center;justify-content:center;
-        box-shadow:0 8px 32px rgba(210,14,7,.55),0 2px 12px rgba(0,0,0,.5);
-        transition:transform .25s cubic-bezier(.16,1,.3,1),box-shadow .25s ease,opacity .3s ease;
-        pointer-events:none;
-      ">
-        <svg id="promo-play-icon" width="26" height="26" viewBox="0 0 24 24" fill="#fff">
-          <path d="M8 5v14l11-7z"/>
-        </svg>
-        <!-- pause icon (hidden by default) -->
-        <svg id="promo-pause-icon" width="24" height="24" viewBox="0 0 24 24" fill="#fff" style="display:none;">
-          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
-        </svg>
-      </div>
-
-      <!-- Bottom label bar -->
-      <div style="position:absolute;bottom:0;left:0;right:0;padding:.9rem 1.25rem;display:flex;align-items:center;justify-content:space-between;pointer-events:none;">
-        <div style="display:flex;align-items:center;gap:.55rem;">
-          <span style="width:7px;height:7px;border-radius:50%;background:#D20E07;display:inline-block;animation:dot-pulse 1.8s ease-in-out infinite;"></span>
-          <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:700;color:#fff;letter-spacing:.08em;">AI Champ · Workshop Promo</span>
-        </div>
-        <div class="pill" style="padding:.25rem .65rem;border-radius:100px;">
-          <span style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:700;color:#fff;letter-spacing:.1em;text-transform:uppercase;">Summer 2026</span>
-        </div>
-      </div>
-
+      <iframe
+        src="https://drive.google.com/file/d/1lyy_A_ETNJ-1E9nviboFF4VeOgK2U9Ke/preview"
+        style="position:absolute;inset:0;width:100%;height:100%;border:none;border-radius:20px;"
+        allow="autoplay"
+        allowfullscreen
+        loading="lazy"
+        title="AI Champ Workshop Promo — Arushi"
+      ></iframe>
     </div><!-- /video wrapper -->
 
   </div>
 </section>
-
-<script>
-(function(){
-  var wrap  = document.getElementById('promo-video-wrap');
-  var video = document.getElementById('promo-video');
-  var overlay   = document.getElementById('promo-overlay');
-  var playbtn   = document.getElementById('promo-playbtn');
-  var playIcon  = document.getElementById('promo-play-icon');
-  var pauseIcon = document.getElementById('promo-pause-icon');
-
-  function setPlaying(playing) {
-    if (playing) {
-      overlay.style.opacity   = '0';
-      playbtn.style.opacity   = '0';
-    } else {
-      overlay.style.opacity   = '1';
-      playbtn.style.opacity   = '1';
-      playIcon.style.display  = 'block';
-      pauseIcon.style.display = 'none';
-    }
-  }
-
-  // click on wrapper toggles play/pause
-  wrap.addEventListener('click', function() {
-    if (video.paused) {
-      video.play();
-    } else {
-      video.pause();
-    }
-  });
-
-  // show pause icon while playing; show play icon when paused
-  video.addEventListener('play', function() {
-    playIcon.style.display  = 'none';
-    pauseIcon.style.display = 'block';
-    // briefly show pause btn then fade out
-    playbtn.style.opacity = '1';
-    setTimeout(function(){ playbtn.style.opacity = '0'; overlay.style.opacity = '0'; }, 600);
-  });
-
-  video.addEventListener('pause', function() {
-    setPlaying(false);
-  });
-
-  video.addEventListener('ended', function() {
-    setPlaying(false);
-    video.currentTime = 0;
-  });
-
-  // hover: show play/pause button
-  wrap.addEventListener('mouseenter', function() {
-    playbtn.style.opacity   = '1';
-    playbtn.style.transform = 'translate(-50%,-50%) scale(1.1)';
-    playbtn.style.boxShadow = '0 12px 40px rgba(210,14,7,.7),0 2px 12px rgba(0,0,0,.5)';
-  });
-  wrap.addEventListener('mouseleave', function() {
-    if (!video.paused) {
-      playbtn.style.opacity = '0';
-    }
-    playbtn.style.transform = 'translate(-50%,-50%) scale(1)';
-    playbtn.style.boxShadow = '0 8px 32px rgba(210,14,7,.55),0 2px 12px rgba(0,0,0,.5)';
-  });
-})();
-</script>
 
 <div class="hr-grad"></div>
 
