@@ -178,12 +178,21 @@
   .img-wrap .img-slide h3, .img-wrap .img-slide p {
     color: #fff !important;
   }
+  /* ── Slide 1 (Student Benefits) heading — light sky blue ── */
+  .img-slide[data-index="1"] h3,
+  .img-wrap .img-slide[data-index="1"] h3 {
+    color: #87ceeb !important;
+    background: none !important;
+    -webkit-background-clip: unset !important;
+    background-clip: unset !important;
+    -webkit-text-fill-color: #87ceeb !important;
+  }
 
   /* ── Force WHITE text where background demands it ── */
   /* Buttons on coloured backgrounds */
   .btn-red, .btn-red *, .eb-cta-btn, .eb-cta-btn * { color: #fff !important; }
   /* Ticker on dark teal background */
-  .ticker-text { color: #fff !important; }
+  .ticker-text { color: #fef08a !important; }
   /* Chatbot user bubble */
   .aw-msg.user .aw-bubble, .aw-msg.user .aw-bubble * { color: #fff !important; }
   /* "Enroll Now" & other red/blue inline buttons */
@@ -342,14 +351,12 @@
     0%   { background-position: 0% 50%; }
     100% { background-position: 200% 50%; }
   }
-  @keyframes eb-card-onoff {
-    0%,38%  { opacity:1; transform:scale(1);    box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25); }
-    42%,48% { opacity:.08; transform:scale(.97); box-shadow:none; }
-    52%,90% { opacity:1; transform:scale(1);    box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25); }
-    94%,98% { opacity:.08; transform:scale(.97); box-shadow:none; }
-    100%    { opacity:1; transform:scale(1);    box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25); }
+  @keyframes eb-card-blink {
+    0%,45%  { opacity:1; }
+    55%,65% { opacity:.15; }
+    75%,100%{ opacity:1; }
   }
-  #eb-card { animation: eb-card-onoff 3.2s ease-in-out infinite; }
+  #eb-card { animation: eb-card-blink 4s ease-in-out infinite; }
   #eb-card:hover { animation-play-state: paused; opacity:1 !important; transform:scale(1.02) !important; }
 
   /* ── Claim modal form ── */
@@ -407,6 +414,15 @@
   .eb-badge { animation: eb-badge-swing 1.8s ease-in-out infinite; display: inline-block; }
   .eb-glow  { animation: eb-glow-pulse 2.2s ease-in-out infinite; }
   .eb-blink { animation: eb-urgency-blink 1.2s step-end infinite; }
+  @keyframes price-rainbow {
+    0%   { color: #D20E07; }
+    20%  { color: #f97316; }
+    40%  { color: #2D05E2; }
+    60%  { color: #0ea5e9; }
+    80%  { color: #16a34a; }
+    100% { color: #D20E07; }
+  }
+  .eb-price-num { animation: price-rainbow 3s linear infinite; font-family:'Montserrat',sans-serif; font-weight:900; display:inline; }
   .eb-spark-dot {
     position: absolute;
     width: 5px; height: 5px;
@@ -646,10 +662,10 @@
     top: 82px;
     max-height: calc(100vh - 100px);
   }
-  /* Curriculum aside must clear the fixed Early Bird card (~112px top + ~290px height) */
+  /* Curriculum aside must clear the fixed Early Bird card (~144px top + ~290px height) */
   #curriculum.sticky-col {
-    top: 415px;
-    max-height: calc(100vh - 435px);
+    top: 447px;
+    max-height: calc(100vh - 467px);
   }
 
   /* ── Pulsing dot ── */
@@ -677,14 +693,42 @@
 ═══════════════════════════════════════════════════ -->
 <div id="welcome-ticker">
   <div class="ticker-track">
-    <span class="ticker-text">👋 &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;<span>Summer AI Camp</span>&nbsp; &nbsp;✦</span>
+    <span class="ticker-text" style="color:#fef08a !important;">Hello! Welcome to the &nbsp;Summer AI Camp 2026&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;Summer AI Camp 2026&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;Summer AI Camp 2026&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;Summer AI Camp 2026&nbsp; &nbsp;✦&nbsp; &nbsp; Hello! Welcome to the &nbsp;Summer AI Camp 2026&nbsp; &nbsp;✦</span>
   </div>
 </div>
 
 <!-- ═══════════════════════════════════════════════════
      STICKY HEADER
 ═══════════════════════════════════════════════════ -->
-<header id="site-header" style="position:fixed;top:40px;left:0;right:0;z-index:200;background:rgba(228,248,243,.97);backdrop-filter:blur(18px);border-bottom:1px solid rgba(11,150,110,.2);">
+<!-- ── Live Clock Bar ── -->
+<div id="clock-bar" style="position:fixed;top:40px;left:0;right:0;z-index:199;height:32px;background:rgba(228,248,243,.97);border-bottom:1px solid rgba(11,150,110,.15);display:flex;align-items:center;padding:0 1.5rem;gap:.75rem;">
+  <svg width="13" height="13" fill="none" stroke="#3d6b5e" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <span id="live-clock" style="font-family:'Montserrat',sans-serif;font-size:.62rem;font-weight:700;color:#0d2520;letter-spacing:.06em;white-space:nowrap;"></span>
+</div>
+<script>
+(function(){
+  function pad(n){ return n < 10 ? '0'+n : n; }
+  function updateClock(){
+    var now = new Date();
+    var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+    var ampm = h >= 12 ? 'PM' : 'AM';
+    var h12 = h % 12 || 12;
+    var str = days[now.getDay()] + ', ' +
+              pad(now.getDate()) + ' ' + months[now.getMonth()] + ' ' + now.getFullYear() +
+              ' &nbsp;|&nbsp; ' +
+              pad(h12) + ':' + pad(m) + ':' + pad(s) + ' ' + ampm +
+              ' IST';
+    var el = document.getElementById('live-clock');
+    if(el) el.innerHTML = str;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
+</script>
+
+<header id="site-header" style="position:fixed;top:72px;left:0;right:0;z-index:200;background:rgba(228,248,243,.97);backdrop-filter:blur(18px);border-bottom:1px solid rgba(11,150,110,.2);">
   <div style="height:2px;background:linear-gradient(90deg,transparent,#D20E07,#056b45,transparent);"></div>
   <div style="max-width:1400px;margin:0 auto;padding:.9rem 1.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;">
 
@@ -717,45 +761,65 @@
 <!-- ═══════════════════════════════════════════════════
      EARLY BIRD OFFER — compact fixed card (top-right)
 ═══════════════════════════════════════════════════ -->
-<div id="eb-card" style="position:fixed;top:112px;right:1.25rem;z-index:800;width:220px;">
+<div id="eb-card" style="position:fixed;top:144px;right:1.25rem;z-index:800;width:200px;">
   <!-- spinning border wrapper -->
   <div style="padding:2px;border-radius:14px;background:linear-gradient(135deg,#D20E07,#2D05E2,#D20E07,#2D05E2);background-size:300% 300%;animation:eb-border-spin 3s linear infinite;box-shadow:0 4px 24px rgba(210,14,7,.35),0 2px 12px rgba(45,5,226,.25);">
-    <div style="background:linear-gradient(145deg,#f0fdf9,#e4f5f0);border-radius:13px;padding:.85rem 1rem;position:relative;overflow:hidden;">
+    <div style="background:linear-gradient(145deg,#f0fdf9,#e4f5f0);border-radius:13px;padding:.6rem .75rem;position:relative;overflow:hidden;">
 
       <!-- spark particles -->
       <span class="eb-spark-dot" style="background:#D20E07;left:15%;top:88%;animation-delay:0s;animation-duration:1.8s;"></span>
       <span class="eb-spark-dot" style="background:#2D05E2;left:55%;top:92%;animation-delay:.7s;animation-duration:2s;"></span>
-      <span class="eb-spark-dot" style="background:#fff;left:82%;top:85%;animation-delay:1.2s;animation-duration:1.6s;"></span>
+      <span class="eb-spark-dot" style="background:#f97316;left:82%;top:85%;animation-delay:1.2s;animation-duration:1.6s;"></span>
 
       <!-- header row -->
-      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem;">
-        <span class="eb-blink" style="width:6px;height:6px;border-radius:50%;background:#D20E07;display:inline-block;flex-shrink:0;"></span>
-        <span style="font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;color:#D20E07;letter-spacing:.14em;text-transform:uppercase;">Limited Time</span>
+      <div style="display:flex;align-items:center;gap:.35rem;margin-bottom:.45rem;">
+        <span class="eb-blink" style="width:5px;height:5px;border-radius:50%;background:#D20E07;display:inline-block;flex-shrink:0;"></span>
+        <span style="font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:800;color:#D20E07;letter-spacing:.14em;text-transform:uppercase;">Limited Time</span>
       </div>
 
       <!-- title -->
-      <div style="font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:900;color:#0d1a16;margin-bottom:.55rem;line-height:1.2;">🎯 Early Bird Offer</div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:900;color:#0d1a16;margin-bottom:.5rem;line-height:1.2;">🎯 Early Bird Offer</div>
 
-      <!-- price row -->
-      <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.55rem;flex-wrap:wrap;">
-        <span class="eb-price" style="font-family:'Montserrat',sans-serif;font-size:1.5rem;font-weight:900;color:#0d1a16;line-height:1;">₹1299</span>
-        <div style="display:flex;flex-direction:column;gap:.05rem;">
-          <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;color:#3d6b5e;text-decoration:line-through;">₹3499</span>
-          <span class="eb-badge" style="background:rgba(210,14,7,.9);color:#0d1a16;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;padding:.15rem .45rem;border-radius:100px;letter-spacing:.06em;display:inline-block;">63% OFF</span>
+      <!-- ── Agentic AI row ── -->
+      <div style="background:rgba(45,5,226,.05);border:1px solid rgba(45,5,226,.12);border-radius:8px;padding:.38rem .5rem;margin-bottom:.3rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:.56rem;font-weight:800;color:#0d1a16;margin-bottom:.18rem;">Agentic AI</div>
+        <div style="display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;">
+          <span class="eb-price-num" style="font-size:1rem;line-height:1;">₹1,299</span>
+          <div style="display:flex;flex-direction:column;gap:.05rem;">
+            <span style="font-family:'Open Sans',sans-serif;font-size:.5rem;color:#3d6b5e;text-decoration:line-through;">₹3,499</span>
+            <span class="eb-badge" style="background:rgba(210,14,7,.9);font-family:'Montserrat',sans-serif;font-size:.48rem;font-weight:800;padding:.08rem .3rem;border-radius:100px;letter-spacing:.05em;display:inline-block;">63% OFF</span>
+          </div>
         </div>
       </div>
 
-      <!-- includes mini list -->
-      <div style="margin-bottom:.75rem;display:flex;flex-direction:column;gap:.22rem;">
-        <div style="font-size:.62rem;color:rgba(13,26,22,.8);font-family:'Open Sans',sans-serif;display:flex;align-items:center;gap:.35rem;"><span style="color:#D20E07;font-weight:700;font-size:.65rem;">✓</span>Workshop + Certificate</div>
-        <div style="font-size:.62rem;color:rgba(13,26,22,.8);font-family:'Open Sans',sans-serif;display:flex;align-items:center;gap:.35rem;"><span style="color:#D20E07;font-weight:700;font-size:.65rem;">✓</span>Expert Mentoring</div>
-        <div style="font-size:.62rem;color:rgba(13,26,22,.8);font-family:'Open Sans',sans-serif;display:flex;align-items:center;gap:.35rem;"><span style="color:#D20E07;font-weight:700;font-size:.65rem;">✓</span>Project Kit</div>
+      <!-- ── Promptly Pro row ── -->
+      <div style="background:rgba(210,14,7,.05);border:1px solid rgba(210,14,7,.12);border-radius:8px;padding:.38rem .5rem;margin-bottom:.3rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:.56rem;font-weight:800;color:#0d1a16;margin-bottom:.18rem;">Promptly Pro</div>
+        <div style="display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;">
+          <span class="eb-price-num" style="font-size:1rem;line-height:1;animation-delay:.8s;">₹999</span>
+          <div style="display:flex;flex-direction:column;gap:.05rem;">
+            <span style="font-family:'Open Sans',sans-serif;font-size:.5rem;color:#3d6b5e;text-decoration:line-through;">₹2,499</span>
+            <span class="eb-badge" style="background:rgba(210,14,7,.9);font-family:'Montserrat',sans-serif;font-size:.48rem;font-weight:800;padding:.08rem .3rem;border-radius:100px;letter-spacing:.05em;display:inline-block;animation-delay:.5s;">60% OFF</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Combo row ── -->
+      <div style="background:rgba(249,115,22,.08);border:1px solid rgba(249,115,22,.25);border-radius:8px;padding:.38rem .5rem;margin-bottom:.5rem;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:.56rem;font-weight:800;color:#0d1a16;margin-bottom:.18rem;">🔥 Combo (Both)</div>
+        <div style="display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;">
+          <span class="eb-price-num" style="font-size:1rem;line-height:1;animation-delay:1.6s;">₹1,999</span>
+          <div style="display:flex;flex-direction:column;gap:.05rem;">
+            <span style="font-family:'Open Sans',sans-serif;font-size:.5rem;color:#3d6b5e;text-decoration:line-through;">₹5,998</span>
+            <span class="eb-badge" style="background:rgba(210,14,7,.9);font-family:'Montserrat',sans-serif;font-size:.48rem;font-weight:800;padding:.08rem .3rem;border-radius:100px;letter-spacing:.05em;display:inline-block;animation-delay:1s;">67% OFF</span>
+          </div>
+        </div>
       </div>
 
       <!-- CTA -->
-      <button onclick="openModal('m-claim')" class="eb-cta-btn" style="width:100%;justify-content:center;font-size:.68rem;padding:.6rem .75rem;border-radius:8px;border:none;cursor:pointer;">
+      <button onclick="openModal('m-claim')" class="eb-cta-btn" style="width:100%;justify-content:center;font-size:.62rem;padding:.5rem .65rem;border-radius:8px;border:none;cursor:pointer;">
         Claim Offer
-        <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
 
     </div>
@@ -766,7 +830,7 @@
 <!-- ═══════════════════════════════════════════════════
      HERO
 ═══════════════════════════════════════════════════ -->
-<section style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:8rem 1.5rem 5rem;overflow:hidden;" class="dots-bg">
+<section style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:11rem 1.5rem 5rem;overflow:hidden;" class="dots-bg">
 
   <!-- Background orbs -->
   <div class="orb" style="--dur:9s;position:absolute;top:22%;left:18%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(210,14,7,.18),transparent 70%);filter:blur(48px);pointer-events:none;"></div>
@@ -802,22 +866,34 @@
       <div style="height:1px;background:linear-gradient(to right,transparent,rgba(210,14,7,.4),transparent);margin-bottom:.85rem;"></div>
 
       <!-- Combo Offer label -->
-      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.55rem;">
+      <div style="display:flex;align-items:center;gap:.4rem;margin-bottom:.45rem;">
         <span style="font-size:1rem;">💰</span>
         <span style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#2D05E2;letter-spacing:.15em;text-transform:uppercase;">Combo Offer</span>
       </div>
+      <!-- Includes checklist -->
+      <div style="display:flex;flex-direction:column;gap:.18rem;margin-bottom:.45rem;">
+        <div style="display:flex;align-items:center;gap:.35rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:#0d2520;">
+          <span style="color:#16a34a;font-weight:800;font-size:.65rem;">✓</span>Workshop Access
+        </div>
+        <div style="display:flex;align-items:center;gap:.35rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:#0d2520;">
+          <span style="color:#16a34a;font-weight:800;font-size:.65rem;">✓</span>AI Certificates
+        </div>
+        <div style="display:flex;align-items:center;gap:.35rem;font-family:'Open Sans',sans-serif;font-size:.6rem;color:#0d2520;">
+          <span style="color:#16a34a;font-weight:800;font-size:.65rem;">✓</span>Project Kit
+        </div>
+      </div>
       <!-- Price row -->
       <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:.35rem;">
-        <span style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:900;color:#0d1a16;line-height:1;">₹1,999</span>
+        <span class="eb-price-num" style="font-size:1.4rem;line-height:1;font-weight:900;">₹1,999</span>
         <div style="display:flex;flex-direction:column;gap:.1rem;">
           <span style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:#3d6b5e;text-decoration:line-through;">Market: ₹5,998</span>
-          <span style="background:#D20E07;color:#0d1a16;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;padding:.1rem .45rem;border-radius:100px;display:inline-block;letter-spacing:.04em;">~67% OFF</span>
+          <span style="background:#D20E07;color:#fff;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:900;padding:.1rem .45rem;border-radius:100px;display:inline-block;letter-spacing:.04em;">~67% OFF</span>
         </div>
       </div>
       <!-- Clarification -->
       <div style="background:rgba(45,5,226,.1);border:1px solid rgba(45,5,226,.2);border-radius:8px;padding:.45rem .6rem;">
-        <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:#c0c0e0;line-height:1.6;">
-          Both workshops combined at <strong style="color:#0d2520;">₹1,999</strong> — not ₹2,298 (individual sum). Save big with the AIC combo!
+        <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:#0d1a16;line-height:1.6;">
+          Both workshops combined at <strong style="color:#0d1a16;">₹1,999</strong> — not ₹2,298 (individual sum). Save big with the AIC combo!
         </div>
       </div>
 
@@ -836,7 +912,7 @@
     <!-- Headline -->
     <h1 class="sr d2" style="font-family:'Montserrat',sans-serif;font-weight:900;font-size:clamp(3rem,8vw,7rem);line-height:.92;letter-spacing:-0.03em;margin-bottom:1.5rem;">
       <span class="grad-text">Become an</span><br>
-      <span style="color:#0d1a16;">AI Champion</span>
+      <span class="grad-text">AI Champion</span>
     </h1>
 
     <!-- Sub -->
@@ -970,11 +1046,17 @@
       </div>
 
       <!-- IMAGE CAROUSEL — auto up/down shuffle -->
-      <div id="img-carousel" style="position:relative;border-radius:14px;overflow:hidden;margin-bottom:2rem;height:420px;">
+      <div id="img-carousel" style="position:relative;border-radius:18px;overflow:hidden;margin-bottom:2rem;height:420px;box-shadow:0 24px 64px rgba(0,0,0,.35),0 0 0 1.5px rgba(61,107,94,.3);">
+
+        <!-- Background: Robot image -->
+        <div style="position:absolute;inset:0;z-index:0;">
+          <img src="Robot image.jpg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;filter:brightness(.45) saturate(1.2);">
+          <div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(13,26,22,.65) 0%,rgba(45,5,226,.18) 50%,rgba(210,14,7,.18) 100%);"></div>
+        </div>
 
         <!-- Slide 0: Workshop 1 -->
-        <div class="img-slide active-slide" data-index="0" onclick="openModal('m-workshop')" role="button" tabindex="0" aria-label="View Workshop 1 details" style="position:absolute;inset:0;cursor:pointer;border-radius:14px;overflow:hidden;border:1px solid rgba(210,14,7,.3);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);transform:translateY(0);opacity:1;">
-          <img src="WORKSHOP 1.jpeg" alt="AI Champ Workshop 1 — Summer 2026" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1);">
+        <div class="img-slide active-slide" data-index="0" onclick="openImgLightbox('WORKSHOP 1.1.png','AI Champ Workshop 1 — Summer 2026')" role="button" tabindex="0" aria-label="View Workshop 1 full image" style="position:absolute;inset:0;z-index:1;cursor:zoom-in;border-radius:14px;overflow:hidden;border:1px solid rgba(210,14,7,.3);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);transform:translateY(0);opacity:1;">
+          <img src="WORKSHOP 1.1.png" alt="AI Champ Workshop 1 — Summer 2026" style="width:100%;height:100%;object-fit:contain;display:block;background:transparent;transition:transform .6s cubic-bezier(.16,1,.3,1);">
           <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.15) 50%,transparent 100%);pointer-events:none;"></div>
           <!-- Top badge -->
           <div style="position:absolute;top:1rem;left:1rem;">
@@ -1000,8 +1082,8 @@
         </div>
 
         <!-- Slide 1: Student Benefits -->
-        <div class="img-slide" data-index="1" onclick="openModal('m-benefits')" role="button" tabindex="0" aria-label="View 10 Student Benefits" style="position:absolute;inset:0;cursor:pointer;border-radius:14px;overflow:hidden;border:1px solid rgba(45,5,226,.3);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);transform:translateY(100%);opacity:0;">
-          <img src="Student Benefits.jpeg" alt="10 Key Benefits Students Will Receive" style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.16,1,.3,1);">
+        <div class="img-slide" data-index="1" onclick="openImgLightbox('Student Benefits.jpeg','10 Benefits Students Will Receive')" role="button" tabindex="0" aria-label="View Student Benefits full image" style="position:absolute;inset:0;z-index:1;cursor:zoom-in;border-radius:14px;overflow:hidden;border:1px solid rgba(45,5,226,.3);transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .7s cubic-bezier(.16,1,.3,1);transform:translateY(100%);opacity:0;">
+          <img src="Student Benefits.jpeg" alt="10 Key Benefits Students Will Receive" style="width:100%;height:100%;object-fit:contain;display:block;background:transparent;transition:transform .6s cubic-bezier(.16,1,.3,1);">
           <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.1) 50%,transparent 100%);pointer-events:none;"></div>
           <!-- Top badge -->
           <div style="position:absolute;top:1rem;left:1rem;">
@@ -1013,7 +1095,7 @@
           <div style="position:absolute;bottom:0;left:0;right:0;padding:1.75rem;">
             <h3 style="font-family:'Montserrat',sans-serif;font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.02em;margin-bottom:.5rem;">10 Benefits Students Will Receive</h3>
             <p style="font-size:.78rem;color:rgba(255,255,255,.82);margin-bottom:1rem;">AI certifications, real-world projects, innovation awards, mentoring from 20 industry experts, and startup-ready skills.</p>
-            <button style="display:inline-flex;align-items:center;gap:.4rem;background:none;border:none;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;color:#D20E07;cursor:pointer;letter-spacing:.04em;padding:0;" onclick="event.stopPropagation();openModal('m-benefits')">
+            <button style="display:inline-flex;align-items:center;gap:.4rem;background:none;border:none;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:700;color:#D20E07;cursor:pointer;letter-spacing:.04em;padding:0;" onclick="event.stopPropagation();openImgLightbox('Student Benefits.jpeg','10 Benefits Students Will Receive')">
               View All Benefits
               <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
@@ -1433,6 +1515,16 @@
     </div>
   </div>
 
+  <!-- Visitor Counter Bar -->
+  <div style="background:linear-gradient(135deg,rgba(13,26,22,.07),rgba(45,5,226,.06));border-top:1px solid rgba(11,150,110,.2);padding:.75rem 1.5rem;">
+    <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:.75rem;">
+      <svg width="15" height="15" fill="none" stroke="#3d6b5e" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 7a4 4 0 100 8 4 4 0 000-8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span style="font-family:'Open Sans',sans-serif;font-size:.68rem;color:#3d6b5e;">Total Visitors:</span>
+      <span id="visitor-count" style="font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:900;color:#D20E07;letter-spacing:.04em;min-width:60px;display:inline-block;">—</span>
+      <span style="font-family:'Open Sans',sans-serif;font-size:.62rem;color:rgba(61,107,94,.6);">| You are visitor #<span id="visitor-self" style="font-weight:700;color:#2D05E2;">—</span></span>
+    </div>
+  </div>
+
   <!-- Footer bar -->
   <div style="border-top:1px solid rgba(11,150,110,.18);padding:1.5rem;margin-top:0;background:#d4ece5;">
     <div style="max-width:1400px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1rem;">
@@ -1443,6 +1535,31 @@
       <span style="font-size:.68rem;color:rgba(30,90,70,.4);font-family:'Open Sans',sans-serif;">© 2026 AI Champ. Empowering AI Education in India.</span>
     </div>
   </div>
+
+  <script>
+  /* ── Visitor Counter using CountAPI (free, no signup) ── */
+  (function(){
+    fetch('https://api.countapi.xyz/hit/aichamp-website/visits')
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var count = data.value || 0;
+        var el   = document.getElementById('visitor-count');
+        var self = document.getElementById('visitor-self');
+        if(el) el.textContent = count.toLocaleString('en-IN');
+        if(self) self.textContent = count.toLocaleString('en-IN');
+      })
+      .catch(function(){
+        /* Fallback: use localStorage as offline counter */
+        var key = 'aic_visits';
+        var c = parseInt(localStorage.getItem(key) || '0') + 1;
+        localStorage.setItem(key, c);
+        var el   = document.getElementById('visitor-count');
+        var self = document.getElementById('visitor-self');
+        if(el) el.textContent = c.toLocaleString('en-IN');
+        if(self) self.textContent = c.toLocaleString('en-IN');
+      });
+  })();
+  </script>
 </section>
 
 
@@ -1477,18 +1594,36 @@
         <span style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#D20E07;letter-spacing:.2em;text-transform:uppercase;">Limited Time · Early Bird 2026</span>
       </div>
 
-      <!-- title + price row -->
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
-        <div>
-          <h3 style="font-family:'Montserrat',sans-serif;font-size:1.55rem;font-weight:900;color:#0d2520;letter-spacing:-.03em;line-height:1.1;margin-bottom:.4rem;">🎯 Claim Your<br>Early Bird Offer</h3>
-          <p style="font-family:'Open Sans',sans-serif;font-size:.75rem;color:rgba(30,90,70,.85);line-height:1.55;max-width:280px;">Fill in your details below and lock in your spot for the <strong style="color:#0d2520;">Summer AI Camp 2026</strong>.</p>
+      <!-- price summary panel — absolute top-right (below close btn) -->
+      <div style="position:absolute;top:3.4rem;right:1rem;background:rgba(13,26,22,.18);border:1px solid rgba(210,14,7,.3);border-radius:10px;padding:.42rem .65rem;display:flex;flex-direction:column;gap:.28rem;min-width:0;max-width:210px;">
+        <!-- Agentic AI -->
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:nowrap;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:700;color:#0d2520;white-space:nowrap;min-width:62px;">Agentic AI</span>
+          <span class="eb-price-num" style="font-size:.68rem;line-height:1;white-space:nowrap;">₹1,299</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.42rem;color:#3d6b5e;text-decoration:line-through;white-space:nowrap;">₹3,499</span>
+          <span class="eb-badge" style="background:#D20E07;font-family:'Montserrat',sans-serif;font-size:.4rem;font-weight:800;padding:.04rem .22rem;border-radius:100px;white-space:nowrap;">63% OFF</span>
         </div>
-        <!-- price pill -->
-        <div style="flex-shrink:0;text-align:center;background:rgba(0,0,0,.35);border:1px solid rgba(210,14,7,.4);border-radius:14px;padding:.7rem 1rem;">
-          <div style="font-family:'Montserrat',sans-serif;font-size:1.7rem;font-weight:900;color:#0d1a16;line-height:1;" class="eb-price">₹1299</div>
-          <div style="font-family:'Montserrat',sans-serif;font-size:.62rem;color:#888;text-decoration:line-through;margin-top:.1rem;">₹3499</div>
-          <div style="margin-top:.3rem;" class="eb-badge"><span style="background:#D20E07;color:#0d1a16;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;padding:.2rem .55rem;border-radius:100px;letter-spacing:.06em;">63% OFF</span></div>
+        <div style="height:1px;background:rgba(210,14,7,.18);"></div>
+        <!-- Promptly Pro -->
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:nowrap;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:700;color:#0d2520;white-space:nowrap;min-width:62px;">Promptly Pro</span>
+          <span class="eb-price-num" style="font-size:.68rem;line-height:1;white-space:nowrap;animation-delay:.8s;">₹999</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.42rem;color:#3d6b5e;text-decoration:line-through;white-space:nowrap;">₹2,499</span>
+          <span class="eb-badge" style="background:#D20E07;font-family:'Montserrat',sans-serif;font-size:.4rem;font-weight:800;padding:.04rem .22rem;border-radius:100px;white-space:nowrap;animation-delay:.5s;">60% OFF</span>
         </div>
+        <!-- Combo -->
+        <div style="display:flex;align-items:center;gap:.3rem;flex-wrap:nowrap;">
+          <span style="font-family:'Montserrat',sans-serif;font-size:.5rem;font-weight:700;color:#0d2520;white-space:nowrap;min-width:62px;">🔥 Combo</span>
+          <span class="eb-price-num" style="font-size:.68rem;line-height:1;white-space:nowrap;animation-delay:1.6s;">₹1,999</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.42rem;color:#3d6b5e;text-decoration:line-through;white-space:nowrap;">₹5,998</span>
+          <span class="eb-badge" style="background:#D20E07;font-family:'Montserrat',sans-serif;font-size:.4rem;font-weight:800;padding:.04rem .22rem;border-radius:100px;white-space:nowrap;animation-delay:1s;">67% OFF</span>
+        </div>
+      </div>
+
+      <!-- title block -->
+      <div>
+        <h3 style="font-family:'Montserrat',sans-serif;font-size:1.55rem;font-weight:900;color:#0d2520;letter-spacing:-.03em;line-height:1.1;margin-bottom:.4rem;">🎯 Claim Your<br>Early Bird Offer</h3>
+        <p style="font-family:'Open Sans',sans-serif;font-size:.75rem;color:rgba(30,90,70,.85);line-height:1.55;max-width:320px;">Fill in your details below and lock in your spot for the <strong style="color:#0d2520;">Summer AI Camp 2026</strong>.</p>
       </div>
 
       <!-- feature chips -->
@@ -1506,8 +1641,71 @@
     <!-- ── Google Form section ── -->
     <div style="padding:1.25rem 1.5rem 1.5rem;">
       <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem;">
-        <svg width="15" height="15" fill="none" stroke="#D20E07" stroke-width="2" viewBox="0 0 24 24"><path d="M9 12h6M9 16h6M7 4h10a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span style="font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:700;color:#3d6b5e;letter-spacing:.08em;text-transform:uppercase;">Registration Form</span>
+      </div>
+
+      <!-- ── Preferred Date Validator ── -->
+      <div style="background:rgba(61,107,94,.1);border:1px solid rgba(61,107,94,.3);border-radius:12px;padding:.85rem 1rem;margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;gap:.45rem;margin-bottom:.55rem;">
+          <svg width="13" height="13" fill="none" stroke="#3d6b5e" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;color:#0d2520;letter-spacing:.08em;text-transform:uppercase;">Book Your Slot</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:#3d6b5e;">(Workshop runs <strong>May 1 – May 17, 2026</strong>)</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;">
+          <input type="date" id="pref-date-input" min="2026-05-01" max="2026-05-17"
+            style="font-family:'Open Sans',sans-serif;font-size:.72rem;color:#0d2520;background:#fff;border:1.5px solid rgba(61,107,94,.4);border-radius:8px;padding:.4rem .65rem;outline:none;cursor:pointer;transition:border-color .2s;"
+            oninput="validatePrefDate(this.value)"
+            onfocus="this.style.borderColor='#3d6b5e'"
+            onblur="this.style.borderColor='rgba(61,107,94,.4)'">
+          <span id="pref-date-msg" style="font-family:'Open Sans',sans-serif;font-size:.65rem;font-weight:600;display:none;"></span>
+        </div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:rgba(13,37,32,.55);margin-top:.45rem;">
+          ℹ️ Select your preferred date above to verify it falls within the valid workshop window before filling the form.
+        </div>
+      </div>
+      <script>
+      function validatePrefDate(val) {
+        var msg    = document.getElementById('pref-date-msg');
+        var inp    = document.getElementById('pref-date-input');
+        var banner = document.getElementById('pref-date-banner');
+        var bannerTxt = document.getElementById('pref-date-banner-txt');
+        if (!val) {
+          msg.style.display = 'none';
+          if (banner) banner.style.display = 'none';
+          return;
+        }
+        var d   = new Date(val);
+        var min = new Date('2026-05-01');
+        var max = new Date('2026-05-17');
+        var dStr = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+        msg.style.display    = 'inline-flex';
+        msg.style.alignItems = 'center';
+        msg.style.gap        = '.3rem';
+        if (d >= min && d <= max) {
+          msg.innerHTML = '✅ <strong>' + dStr + '</strong> is within the workshop window.';
+          msg.style.color = '#16a34a';
+          inp.style.borderColor = '#16a34a';
+          // show reminder banner above the form
+          if (banner && bannerTxt) {
+            bannerTxt.textContent = dStr;
+            banner.style.display = 'flex';
+          }
+        } else {
+          msg.innerHTML = '❌ <strong>' + dStr + '</strong> is outside the workshop dates (1 May – 17 May 2026).';
+          msg.style.color = '#D20E07';
+          inp.style.borderColor = '#D20E07';
+          if (banner) banner.style.display = 'none';
+        }
+      }
+      </script>
+
+      <!-- Preferred date reminder banner — shown above form once valid date is picked -->
+      <div id="pref-date-banner" style="display:none;align-items:center;gap:.65rem;background:linear-gradient(135deg,rgba(22,163,74,.12),rgba(11,150,110,.1));border:1.5px solid rgba(22,163,74,.4);border-radius:10px;padding:.6rem .85rem;margin-bottom:.75rem;">
+        <svg width="16" height="16" fill="none" stroke="#16a34a" stroke-width="2" viewBox="0 0 24 24" style="flex-shrink:0;"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div style="flex:1;">
+          <div style="font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:800;color:#16a34a;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.15rem;">📌 Your Preferred Date</div>
+          <div style="font-family:'Open Sans',sans-serif;font-size:.7rem;font-weight:700;color:#0d2520;" id="pref-date-banner-txt"></div>
+        </div>
+        <div style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:rgba(13,37,32,.6);text-align:right;line-height:1.5;flex-shrink:0;">Please enter this date<br>in <strong>Preferred Dates</strong> field<br>in the form below ↓</div>
       </div>
 
       <div style="border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.4);border:1px solid rgba(255,255,255,.07);">
@@ -1680,7 +1878,7 @@
     <button onclick="closeAllModals()" style="position:absolute;top:1rem;right:1rem;z-index:10;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.1);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s ease;" onmouseover="this.style.background='#D20E07'" onmouseleave="this.style.background='rgba(255,255,255,.1)'" aria-label="Close">
       <svg width="14" height="14" fill="none" stroke="#fff" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
     </button>
-    <img src="WORKSHOP 1.jpeg" alt="Workshop 1" style="width:100%;display:block;border-radius:16px;">
+    <img src="WORKSHOP 1.1.png" alt="Workshop 1" style="width:100%;display:block;border-radius:16px;">
   </div>
 
   <!-- Benefits -->
@@ -1918,7 +2116,7 @@
 
     // For sticky elements (curriculum/about sidebars) scrollIntoView is unreliable.
     // Calculate the element's absolute top position on the page and scroll there directly.
-    var OFFSET = id === 'curriculum' ? 420 : 120; // curriculum clears EB card (fixed ~415px from top)
+    var OFFSET = id === 'curriculum' ? 452 : 152; // curriculum clears EB card (fixed ~447px from top)
     var rect = el.getBoundingClientRect();
     var absoluteTop = rect.top + window.pageYOffset - OFFSET;
 
@@ -2230,10 +2428,15 @@
            '<br><br>We typically respond within <strong>24 hours</strong>. You\'re also welcome to use the <em>Enroll Now</em> form on our website!'
     },
     {
-      keys: ['fee','price','cost','pricing','charge','payment','rupee','₹','1299','3499','early bird','offer','discount'],
-      ans: '💰 <strong>Workshop Fee:</strong><br>' +
-           '<span style="font-size:.9em;color:#3d6b5e;text-decoration:line-through;">₹3499</span> &nbsp;→&nbsp; <strong style="color:#D20E07;font-size:1.05em;">₹1299</strong> &nbsp;<span style="background:#D20E07;color:#0d1a16;padding:.1rem .4rem;border-radius:100px;font-size:.75em;font-weight:800;">63% OFF</span><br><br>' +
-           'This is our <strong>Early Bird Offer</strong> for 2026. Click the blinking card on the top-right of the page to <strong>Claim Your Offer</strong> before seats fill up!'
+      keys: ['fee','price','cost','pricing','charge','payment','rupee','₹','1299','3499','999','2499','1999','5998','early bird','offer','discount'],
+      ans: '💰 <strong>Workshop Fees:</strong><br><br>' +
+           '🔹 <strong>Agentic AI</strong><br>' +
+           '&nbsp;&nbsp;<span style="color:#3d6b5e;text-decoration:line-through;font-size:.9em;">₹3,499</span> &nbsp;→&nbsp; <strong style="color:#D20E07;">₹1,299</strong> &nbsp;<span style="background:#D20E07;color:#fff;padding:.1rem .35rem;border-radius:100px;font-size:.72em;font-weight:800;">63% OFF</span><br><br>' +
+           '🔹 <strong>Promptly Pro</strong><br>' +
+           '&nbsp;&nbsp;<span style="color:#3d6b5e;text-decoration:line-through;font-size:.9em;">₹2,499</span> &nbsp;→&nbsp; <strong style="color:#D20E07;">₹999</strong> &nbsp;<span style="background:#D20E07;color:#fff;padding:.1rem .35rem;border-radius:100px;font-size:.72em;font-weight:800;">60% OFF</span><br><br>' +
+           '🔥 <strong>Combo (Both Workshops)</strong><br>' +
+           '&nbsp;&nbsp;<span style="color:#3d6b5e;text-decoration:line-through;font-size:.9em;">₹5,998</span> &nbsp;→&nbsp; <strong style="color:#D20E07;">₹1,999</strong> &nbsp;<span style="background:#D20E07;color:#fff;padding:.1rem .35rem;border-radius:100px;font-size:.72em;font-weight:800;">67% OFF</span><br><br>' +
+           'This is our <strong>Early Bird Offer for 2026</strong>. Click the blinking card on the top-right of the page to <strong>Claim Your Offer</strong> before seats fill up!'
     },
     {
       keys: ['curriculum','topic','learn','syllabus','subject','what will','teach','content','module'],
@@ -2424,6 +2627,84 @@
   }, 3000);
 
 })();
+
+/* ── Image Lightbox with navigation ── */
+var _lbImages = [
+  { src: 'WORKSHOP 1.1.png',       alt: 'AI Champ Workshop 1 — Summer 2026' },
+  { src: 'Student Benefits.jpeg',  alt: '10 Benefits Students Will Receive'  }
+];
+var _lbIndex = 0;
+
+function _lbShow(idx) {
+  _lbIndex = (idx + _lbImages.length) % _lbImages.length;
+  var img  = document.getElementById('img-lightbox-img');
+  var cap  = document.getElementById('img-lightbox-cap');
+  var dot0 = document.getElementById('lb-dot-0');
+  var dot1 = document.getElementById('lb-dot-1');
+  img.style.opacity = '0';
+  setTimeout(function() {
+    img.src = _lbImages[_lbIndex].src;
+    img.alt = _lbImages[_lbIndex].alt;
+    if (cap) cap.textContent = _lbImages[_lbIndex].alt;
+    img.style.opacity = '1';
+  }, 180);
+  if (dot0) dot0.style.background = _lbIndex === 0 ? '#D20E07' : 'rgba(255,255,255,.35)';
+  if (dot1) dot1.style.background = _lbIndex === 1 ? '#D20E07' : 'rgba(255,255,255,.35)';
+}
+
+window.openImgLightbox = function(src) {
+  var idx = _lbImages.findIndex(function(i){ return i.src === src; });
+  document.getElementById('img-lightbox').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  _lbShow(idx >= 0 ? idx : 0);
+};
+window.closeImgLightbox = function() {
+  document.getElementById('img-lightbox').style.display = 'none';
+  document.body.style.overflow = '';
+};
+window.lbPrev = function(e) { e.stopPropagation(); _lbShow(_lbIndex - 1); };
+window.lbNext = function(e) { e.stopPropagation(); _lbShow(_lbIndex + 1); };
+
+document.addEventListener('keydown', function(e) {
+  var lb = document.getElementById('img-lightbox');
+  if (lb.style.display === 'none' || !lb.style.display) return;
+  if (e.key === 'Escape')     closeImgLightbox();
+  if (e.key === 'ArrowLeft')  _lbShow(_lbIndex - 1);
+  if (e.key === 'ArrowRight') _lbShow(_lbIndex + 1);
+});
 </script>
+
+<!-- ── Full-image Lightbox ── -->
+<div id="img-lightbox" onclick="closeImgLightbox()" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.93);align-items:center;justify-content:center;cursor:zoom-out;">
+
+  <!-- Left arrow -->
+  <button onclick="lbPrev(event)" style="position:absolute;left:1.25rem;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;z-index:10;" onmouseover="this.style.background='#2D05E2';this.style.transform='translateY(-50%) scale(1.1)'" onmouseleave="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-50%)'" aria-label="Previous image">
+    <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <!-- Right arrow -->
+  <button onclick="lbNext(event)" style="position:absolute;right:1.25rem;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.2);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;z-index:10;" onmouseover="this.style.background='#D20E07';this.style.transform='translateY(-50%) scale(1.1)'" onmouseleave="this.style.background='rgba(255,255,255,.12)';this.style.transform='translateY(-50%)'" aria-label="Next image">
+    <svg width="20" height="20" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <!-- Image wrapper — close button anchored to image corner -->
+  <div onclick="event.stopPropagation()" style="position:relative;display:inline-flex;max-width:88vw;max-height:84vh;">
+    <img id="img-lightbox-img" src="" alt="" style="max-width:88vw;max-height:84vh;object-fit:contain;border-radius:12px;box-shadow:0 32px 80px rgba(0,0,0,.8);transition:opacity .18s ease;display:block;">
+    <!-- Close button on image top-right -->
+    <button onclick="closeImgLightbox()" style="position:absolute;top:-14px;right:-14px;width:32px;height:32px;border-radius:50%;background:rgba(30,30,30,.85);border:1.5px solid rgba(255,255,255,.25);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .2s;z-index:10;" onmouseover="this.style.background='#D20E07';this.style.transform='scale(1.15)'" onmouseleave="this.style.background='rgba(30,30,30,.85)';this.style.transform='scale(1)'" aria-label="Close">
+      <svg width="13" height="13" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+
+  <!-- Caption + dots -->
+  <div onclick="event.stopPropagation()" style="position:absolute;bottom:1.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;">
+    <span id="img-lightbox-cap" style="font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:700;color:rgba(255,255,255,.75);letter-spacing:.06em;text-align:center;max-width:400px;"></span>
+    <div style="display:flex;gap:.5rem;">
+      <span id="lb-dot-0" style="width:8px;height:8px;border-radius:50%;background:#D20E07;display:inline-block;transition:background .2s;"></span>
+      <span id="lb-dot-1" style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.35);display:inline-block;transition:background .2s;"></span>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
