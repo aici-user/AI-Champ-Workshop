@@ -18,6 +18,8 @@ const MIME = {
   '.gif':  'image/gif',
   '.svg':  'image/svg+xml',
   '.ico':  'image/x-icon',
+  '.webp': 'image/webp',
+  '.mp4':  'video/mp4',
   '.woff': 'font/woff',
   '.woff2':'font/woff2',
 };
@@ -26,24 +28,21 @@ const server = http.createServer((req, res) => {
   let urlPath = req.url.split('?')[0];
   if (urlPath === '/') urlPath = '/index.html';
 
-  const filePath = path.join(__dirname, decodeURIComponent(urlPath));
+  const filePath = path.join(__dirname, urlPath);
   const ext = path.extname(filePath).toLowerCase();
-  const contentType = MIME[ext] || 'application/octet-stream';
+  const mime = MIME[ext] || 'application/octet-stream';
 
   fs.readFile(filePath, (err, data) => {
     if (err) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('404 Not Found: ' + urlPath);
+      res.end('404 Not Found');
       return;
     }
-    res.writeHead(200, {
-      'Content-Type': contentType,
-      'Cache-Control': 'no-cache',
-    });
+    res.writeHead(200, { 'Content-Type': mime });
     res.end(data);
   });
 });
 
 server.listen(PORT, () => {
-  console.log(`AI Champ server running at http://localhost:${PORT}`);
+  console.log(`Server running at http://localhost:${PORT}`);
 });
