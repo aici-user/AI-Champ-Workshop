@@ -4,6 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Champ — EduTech AI Workshops, Certifications & Mentoring</title>
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#056b45">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AI Champ">
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
@@ -913,9 +921,36 @@
     /* ── EB cards — hide fixed sidebar (rely on in-page cards on mobile) ── */
     .eb-flip-card { display: none !important; }
 
-    /* ── Hero section ── */
+    /* ── Hero section — column layout on mobile ── */
     section[style*="min-height:100vh"] {
       padding: 8rem 1rem 3rem !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+    }
+
+    /* ── Hero content — ensure it comes first in column layout ── */
+    #hero-content { order: 1; width: 100% !important; }
+
+    /* ── Venue pin — show as inline card below hero content on mobile ── */
+    #venue-pin {
+      display: block !important;
+      position: relative !important;  /* relative keeps #vpin-professionals contained */
+      left: auto !important;           /* cancel inline left:2.5rem */
+      top: auto !important;            /* cancel inline top:28% */
+      width: 100% !important;
+      max-width: 300px !important;
+      margin: 2rem auto 0 !important;
+      order: 10;
+      animation: venue-float-mobile 3s ease-in-out infinite !important;
+      transform: none !important;
+    }
+    #venue-pin:hover {
+      transform: translateY(0) rotate(0deg) !important;
+    }
+    @keyframes venue-float-mobile {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-6px); }
     }
     section[style*="min-height:100vh"] h1 {
       font-size: clamp(2rem,9.5vw,3.4rem) !important;
@@ -1033,6 +1068,9 @@
     /* ── CTA buttons in hero ── */
     .cta-wrap { width: 100%; }
     #login-btn { width: 100%; justify-content: center !important; }
+
+    /* ── Venue pin — full width on very small screens ── */
+    #venue-pin { max-width: 100% !important; margin: 1.5rem auto 0 !important; }
   }
 
   /* ════════════════════════════════════════════
@@ -1520,6 +1558,10 @@
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.5rem .65rem;margin-bottom:.4rem;">
         <div style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;color:#0d2520;line-height:1.3;">Orchids International School</div>
         <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:#3d6b5e;margin-top:.1rem;">New Town, Kolkata</div>
+        <div style="display:flex;align-items:center;gap:.3rem;margin-top:.25rem;">
+          <svg width="9" height="9" fill="none" stroke="#D20E07" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span style="font-family:'Montserrat',sans-serif;font-size:.58rem;font-weight:800;color:#D20E07;">May 16 &amp; 17, May 23 &amp; 24</span>
+        </div>
       </div>
       <!-- Venue 2 -->
       <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:.5rem .65rem;margin-bottom:.75rem;">
@@ -1657,7 +1699,7 @@
   })();
   </script>
 
-  <div style="position:relative;z-index:10;max-width:860px;text-align:center;">
+  <div id="hero-content" style="position:relative;z-index:10;max-width:860px;text-align:center;">
 
     <!-- Badge -->
     <div class="sr pill d1" style="display:inline-flex;align-items:center;gap:.6rem;padding:.45rem 1.1rem;border-radius:100px;margin-bottom:2rem;">
@@ -2717,55 +2759,14 @@
         <div style="display:flex;align-items:center;gap:.45rem;margin-bottom:.55rem;">
           <svg width="13" height="13" fill="none" stroke="#3d6b5e" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span style="font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:800;color:#0d2520;letter-spacing:.08em;text-transform:uppercase;">Book Your Slot</span>
-          <span style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:#3d6b5e;">(Workshop runs <strong>May 1 – May 17, 2026</strong>)</span>
         </div>
-        <div style="display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;">
-          <input type="date" id="pref-date-input" min="2026-05-01" max="2026-05-17"
-            style="font-family:'Open Sans',sans-serif;font-size:.72rem;color:#0d2520;background:#fff;border:1.5px solid rgba(61,107,94,.4);border-radius:8px;padding:.4rem .65rem;outline:none;cursor:pointer;transition:border-color .2s;"
-            oninput="validatePrefDate(this.value)"
-            onfocus="this.style.borderColor='#3d6b5e'"
-            onblur="this.style.borderColor='rgba(61,107,94,.4)'">
-          <span id="pref-date-msg" style="font-family:'Open Sans',sans-serif;font-size:.65rem;font-weight:600;display:none;"></span>
-        </div>
-        <div style="font-family:'Open Sans',sans-serif;font-size:.58rem;color:rgba(13,37,32,.55);margin-top:.45rem;">
-          ℹ️ Select your preferred date above to verify it falls within the valid workshop window before filling the form.
+        <div style="display:flex;flex-direction:column;gap:.22rem;">
+          <span style="font-family:'Open Sans',sans-serif;font-size:.68rem;font-weight:700;color:#16a34a;">Sat, 16 May</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.68rem;font-weight:700;color:#16a34a;">Sun, 17 May</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.68rem;font-weight:700;color:#16a34a;">Sat, 23 May</span>
+          <span style="font-family:'Open Sans',sans-serif;font-size:.68rem;font-weight:700;color:#16a34a;">Sun, 24 May</span>
         </div>
       </div>
-      <script>
-      function validatePrefDate(val) {
-        var msg    = document.getElementById('pref-date-msg');
-        var inp    = document.getElementById('pref-date-input');
-        var banner = document.getElementById('pref-date-banner');
-        var bannerTxt = document.getElementById('pref-date-banner-txt');
-        if (!val) {
-          msg.style.display = 'none';
-          if (banner) banner.style.display = 'none';
-          return;
-        }
-        var d   = new Date(val);
-        var min = new Date('2026-05-01');
-        var max = new Date('2026-05-17');
-        var dStr = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
-        msg.style.display    = 'inline-flex';
-        msg.style.alignItems = 'center';
-        msg.style.gap        = '.3rem';
-        if (d >= min && d <= max) {
-          msg.innerHTML = '✅ <strong>' + dStr + '</strong> is within the workshop window.';
-          msg.style.color = '#16a34a';
-          inp.style.borderColor = '#16a34a';
-          // show reminder banner above the form
-          if (banner && bannerTxt) {
-            bannerTxt.textContent = dStr;
-            banner.style.display = 'flex';
-          }
-        } else {
-          msg.innerHTML = '❌ <strong>' + dStr + '</strong> is outside the workshop dates (1 May – 17 May 2026).';
-          msg.style.color = '#D20E07';
-          inp.style.borderColor = '#D20E07';
-          if (banner) banner.style.display = 'none';
-        }
-      }
-      </script>
 
       <!-- Preferred date reminder banner — shown above form once valid date is picked -->
       <div id="pref-date-banner" style="display:none;align-items:center;gap:.65rem;background:linear-gradient(135deg,rgba(22,163,74,.12),rgba(11,150,110,.1));border:1.5px solid rgba(22,163,74,.4);border-radius:10px;padding:.6rem .85rem;margin-bottom:.75rem;">
@@ -3252,14 +3253,19 @@
           <span style="margin-left:auto;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;color:#f97316;letter-spacing:.1em;text-transform:uppercase;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);padding:.2rem .55rem;border-radius:100px;">Soon</span>
         </button>
 
-        <button style="display:flex;align-items:center;gap:1rem;padding:.85rem 1.25rem;background:linear-gradient(135deg,rgba(0,0,0,.88),rgba(30,30,30,.95));border:1.5px solid rgba(255,255,255,.12);border-radius:14px;cursor:not-allowed;opacity:.75;position:relative;overflow:hidden;width:100%;text-align:left;">
+        <a href="https://play.google.com/store/apps/details?id=com.aichamp.app" target="_blank" rel="noopener"
+          style="display:flex;align-items:center;gap:1rem;padding:.85rem 1.25rem;background:linear-gradient(135deg,rgba(0,0,0,.92),rgba(20,40,30,.97));border:1.5px solid rgba(74,222,128,.35);border-radius:14px;cursor:pointer;position:relative;overflow:hidden;width:100%;text-align:left;text-decoration:none;transition:border-color .25s ease,box-shadow .25s ease,transform .2s ease;"
+          onmouseover="this.style.borderColor='rgba(74,222,128,.7)';this.style.boxShadow='0 8px 32px rgba(74,222,128,.25)';this.style.transform='translateY(-2px)'"
+          onmouseout="this.style.borderColor='rgba(74,222,128,.35)';this.style.boxShadow='none';this.style.transform=''">
+          <!-- shimmer -->
+          <span style="position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);animation:eb-shimmer 2.8s linear infinite;pointer-events:none;"></span>
           <svg width="26" height="26" viewBox="0 0 24 24"><path fill="#3DDC84" d="M3.18 23.76c.32.18.68.19 1.02.04l12.4-7.16-2.64-2.63-10.78 9.75z"/><path fill="#EA4335" d="M20.82 10.44l-2.67-1.54-2.98 2.98 2.98 2.98 2.7-1.56c.77-.45.77-1.41-.03-1.86z"/><path fill="#FBBC04" d="M1.47.76A1.47 1.47 0 000 2.22v19.47c0 .6.4 1.14 1 1.38L13.4 11.88 1.47.76z"/><path fill="#4285F4" d="M4.2.2L16.6 7.36l-2.64 2.63L1.18.24C1.52.08 1.88.08 2.2.24L4.2.2z"/></svg>
           <div>
             <div style="font-family:'Open Sans',sans-serif;font-size:.6rem;color:rgba(255,255,255,.55);margin-bottom:.08rem;">Get it on</div>
             <div style="font-family:'Montserrat',sans-serif;font-size:.88rem;font-weight:800;color:#fff;">Google Play</div>
           </div>
-          <span style="margin-left:auto;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;color:#f97316;letter-spacing:.1em;text-transform:uppercase;background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);padding:.2rem .55rem;border-radius:100px;">Soon</span>
-        </button>
+          <span style="margin-left:auto;font-family:'Montserrat',sans-serif;font-size:.55rem;font-weight:800;color:#4ADE80;letter-spacing:.1em;text-transform:uppercase;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.3);padding:.2rem .55rem;border-radius:100px;">Live ↗</span>
+        </a>
       </div>
 
       <!-- Notify me strip -->
@@ -3940,7 +3946,7 @@
           onblur="this.style.borderColor='rgba(11,150,110,.3)';this.style.boxShadow='none'"
           onkeydown="if(event.key==='Enter')lrSendEmailOTP()">
         <div id="lr-email-err" style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#D20E07;min-height:1rem;margin-bottom:.65rem;display:none;">Please enter a valid email address.</div>
-        <button onclick="lrSendEmailOTP()"
+        <button id="lr-send-email-otp-btn" onclick="lrSendEmailOTP()"
           style="width:100%;padding:.8rem;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#2D05E2,#4a25f5);color:#fff;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.05em;box-shadow:0 6px 20px rgba(45,5,226,.35);transition:transform .2s ease,box-shadow .2s ease;position:relative;overflow:hidden;"
           onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
           <span style="position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:eb-shimmer 2.4s linear infinite;pointer-events:none;"></span>
@@ -3981,7 +3987,7 @@
 
         <div id="lr-eotp-err" style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:#D20E07;text-align:center;min-height:1rem;margin-bottom:.65rem;display:none;"></div>
 
-        <button onclick="lrVerifyEmailOTP()"
+        <button id="lr-email-verify-btn" onclick="lrVerifyEmailOTP()"
           style="width:100%;padding:.8rem;border:none;border-radius:12px;cursor:pointer;background:linear-gradient(135deg,#2D05E2,#4a25f5);color:#fff;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:800;letter-spacing:.05em;box-shadow:0 6px 20px rgba(45,5,226,.35);transition:transform .2s ease;position:relative;overflow:hidden;margin-bottom:.75rem;"
           onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">
           <span style="position:absolute;top:0;left:-100%;width:55%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);animation:eb-shimmer 2.4s linear infinite;pointer-events:none;"></span>
@@ -3990,7 +3996,7 @@
 
         <div style="text-align:center;">
           <span id="lr-eresend-timer" style="font-family:'Open Sans',sans-serif;font-size:.68rem;color:#3d6b5e;"></span>
-          <button id="lr-eresend-btn" onclick="lrSendEmailOTP()" style="display:none;background:none;border:none;font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;color:#2D05E2;cursor:pointer;text-decoration:underline;">Resend OTP</button>
+          <button id="lr-eresend-btn" onclick="lrResendEmailOTP()" style="display:none;background:none;border:none;font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:800;color:#2D05E2;cursor:pointer;text-decoration:underline;">Resend OTP</button>
           <span style="font-family:'Open Sans',sans-serif;font-size:.65rem;color:rgba(61,107,94,.6);"> · </span>
           <button onclick="lrBackToEmailInput()" style="background:none;border:none;font-family:'Open Sans',sans-serif;font-size:.68rem;color:#3d6b5e;cursor:pointer;text-decoration:underline;">Change email</button>
         </div>
@@ -4672,8 +4678,30 @@
     }
   };
 
-  /* ── generate 6-digit OTP ── */
-  function genOTP() { return String(Math.floor(100000 + Math.random() * 900000)); }
+  /* ══════════════════════════════════════════════════════════════════
+     REAL OTP — calls backend /api/send-otp and /api/verify-otp
+     OTP is generated & stored server-side; never shown on the page.
+  ══════════════════════════════════════════════════════════════════ */
+
+  /* ── shared: set button loading state ── */
+  function setBtnLoading(btnId, loading, label) {
+    var btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.disabled = loading;
+    btn.style.opacity = loading ? '0.7' : '1';
+    btn.style.cursor  = loading ? 'wait' : 'pointer';
+    if (label) btn.querySelector('span:last-child') ? (btn.querySelector('span:last-child').textContent = label) : (btn.textContent = label);
+  }
+
+  /* ── shared: call backend API ── */
+  function apiCall(endpoint, payload) {
+    return fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify(payload),
+    }).then(function(r) { return r.json().then(function(d){ d._status = r.status; return d; }); });
+  }
 
   /* ── phone validation ── */
   window.lrValidatePhone = function() {
@@ -4682,37 +4710,58 @@
     if (err) err.style.display = v.length > 0 && v.length < 10 ? 'block' : 'none';
   };
 
-  /* ── send OTP (phone) ── */
+  /* ── send OTP (phone) — calls real backend ── */
   window.lrSendOTP = function() {
-    var ph = (document.getElementById('lr-phone')||{}).value||'';
+    var ph = ((document.getElementById('lr-phone')||{}).value||'').replace(/\D/g,'');
     var err = document.getElementById('lr-phone-err');
-    if (ph.length !== 10) {
-      if (err) { err.style.display = 'block'; }
-      return;
-    }
-    _otp = genOTP();
-    /* ── In production: replace this alert with your SMS gateway API call ── */
-    console.log('[AI Champ OTP]', _otp); // dev log — remove in production
-    alert('📱 OTP sent to +91 ' + ph + '\n\n[Demo mode: your OTP is ' + _otp + ']');
-    document.getElementById('lr-step-phone').style.display = 'none';
-    var msg = document.getElementById('lr-otp-sent-msg');
-    if (msg) msg.innerHTML = 'OTP sent to <strong>+91 ' + ph + '</strong><br><span style="font-size:.68rem;color:#3d6b5e;">Enter the 6-digit code below</span>';
-    document.getElementById('lr-step-otp').style.display = 'block';
-    clearOTPBoxes('lr-otp-box');
-    var boxes = document.querySelectorAll('.lr-otp-box');
-    if (boxes[0]) setTimeout(function(){ boxes[0].focus(); }, 100);
-    startResendTimer('lr-resend-timer', 'lr-resend-btn');
+    if (ph.length !== 10) { if (err) { err.textContent = 'Please enter a valid 10-digit mobile number.'; err.style.display = 'block'; } return; }
+    if (err) err.style.display = 'none';
+
+    var btn = document.getElementById('lr-send-otp-btn');
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.textContent = 'Sending OTP…'; }
+
+    apiCall('/api/send-otp', { type: 'phone', value: ph })
+      .then(function(data) {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Send OTP →'; }
+        if (data.error) {
+          if (err) { err.textContent = data.error; err.style.display = 'block'; }
+          return;
+        }
+        document.getElementById('lr-step-phone').style.display = 'none';
+        var msg = document.getElementById('lr-otp-sent-msg');
+        if (msg) msg.innerHTML = 'OTP sent to <strong>+91\u00a0' + ph + '</strong><br><span style="font-size:.68rem;color:#3d6b5e;">Check your SMS and enter the 6-digit code below</span>';
+        document.getElementById('lr-step-otp').style.display = 'block';
+        clearOTPBoxes('lr-otp-box');
+        var boxes = document.querySelectorAll('.lr-otp-box');
+        if (boxes[0]) setTimeout(function(){ boxes[0].focus(); }, 100);
+        startResendTimer('lr-resend-timer', 'lr-resend-btn');
+      })
+      .catch(function() {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Send OTP →'; }
+        if (err) { err.textContent = 'Network error. Please try again.'; err.style.display = 'block'; }
+      });
   };
 
-  /* ── resend OTP ── */
+  /* ── resend OTP (phone) ── */
   window.lrResendOTP = function() {
-    var ph = (document.getElementById('lr-phone')||{}).value||'';
-    _otp = genOTP();
-    console.log('[AI Champ OTP resend]', _otp);
-    alert('📱 New OTP sent to +91 ' + ph + '\n\n[Demo mode: your OTP is ' + _otp + ']');
-    clearOTPBoxes('lr-otp-box');
-    document.getElementById('lr-resend-btn').style.display = 'none';
-    startResendTimer('lr-resend-timer', 'lr-resend-btn');
+    var ph = ((document.getElementById('lr-phone')||{}).value||'').replace(/\D/g,'');
+    var resendBtn = document.getElementById('lr-resend-btn');
+    var otpErr    = document.getElementById('lr-otp-err');
+    if (resendBtn) { resendBtn.disabled = true; resendBtn.textContent = 'Sending…'; }
+
+    apiCall('/api/send-otp', { type: 'phone', value: ph })
+      .then(function(data) {
+        if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
+        if (data.error) { if (otpErr) { otpErr.textContent = data.error; otpErr.style.display = 'block'; } return; }
+        clearOTPBoxes('lr-otp-box');
+        if (otpErr) otpErr.style.display = 'none';
+        resendBtn.style.display = 'none';
+        startResendTimer('lr-resend-timer', 'lr-resend-btn');
+      })
+      .catch(function() {
+        if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
+        if (otpErr) { otpErr.textContent = 'Network error. Please try again.'; otpErr.style.display = 'block'; }
+      });
   };
 
   /* ── back to phone input ── */
@@ -4722,25 +4771,32 @@
     clearInterval(_resendT);
   };
 
-  /* ── verify OTP (phone) ── */
+  /* ── verify OTP (phone) — calls real backend ── */
   window.lrVerifyOTP = function() {
     var entered = getOTPValue('lr-otp-box');
     var err = document.getElementById('lr-otp-err');
-    if (entered.length < 6) {
-      showErr(err, 'Please enter all 6 digits.');
-      return;
-    }
-    if (entered !== _otp) {
-      showErr(err, 'Incorrect OTP. Please try again.');
-      shakBoxes('lr-otp-box');
-      return;
-    }
-    err.style.display = 'none';
-    clearInterval(_resendT);
-    showSuccess(
-      'Signed in successfully! 🎉',
-      'Welcome to AI Champ. You\'re now logged in with your mobile number +91 ' + (document.getElementById('lr-phone')||{}).value
-    );
+    var ph  = ((document.getElementById('lr-phone')||{}).value||'').replace(/\D/g,'');
+    if (entered.length < 6) { showErr(err, 'Please enter all 6 digits.'); return; }
+    if (err) err.style.display = 'none';
+
+    var btn = document.getElementById('lr-verify-btn');
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.textContent = 'Verifying…'; }
+
+    apiCall('/api/verify-otp', { type: 'phone', value: ph, otp: entered })
+      .then(function(data) {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Verify &amp; Sign In ✓'; }
+        if (data.error) { showErr(err, data.error); shakBoxes('lr-otp-box'); return; }
+        clearInterval(_resendT);
+        showSuccess(
+          'Signed in successfully! 🎉',
+          'Welcome to AI Champ. You\'re now logged in as +91\u00a0' + ph
+        );
+        updateNavToLoggedIn(data.user);
+      })
+      .catch(function() {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Verify &amp; Sign In ✓'; }
+        showErr(err, 'Network error. Please try again.');
+      });
   };
 
   /* ── email validation ── */
@@ -4751,23 +4807,55 @@
     if (err) err.style.display = (v.length > 0 && !valid) ? 'block' : 'none';
   };
 
-  /* ── send OTP (email) ── */
+  /* ── send OTP (email) — calls real backend ── */
   window.lrSendEmailOTP = function() {
-    var em = (document.getElementById('lr-email')||{}).value||'';
-    var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em);
+    var em  = ((document.getElementById('lr-email')||{}).value||'').trim();
     var err = document.getElementById('lr-email-err');
-    if (!valid) { if (err) err.style.display = 'block'; return; }
-    _otp = genOTP();
-    console.log('[AI Champ Email OTP]', _otp);
-    alert('✉️ OTP sent to ' + em + '\n\n[Demo mode: your OTP is ' + _otp + ']');
-    document.getElementById('lr-step-email').style.display = 'none';
-    var msg = document.getElementById('lr-email-otp-msg');
-    if (msg) msg.innerHTML = 'OTP sent to <strong>' + em + '</strong><br><span style="font-size:.68rem;color:#3d6b5e;">Enter the 6-digit code below</span>';
-    document.getElementById('lr-step-email-otp').style.display = 'block';
-    clearOTPBoxes('lr-eotp-box');
-    var boxes = document.querySelectorAll('.lr-eotp-box');
-    if (boxes[0]) setTimeout(function(){ boxes[0].focus(); }, 100);
-    startResendTimer('lr-eresend-timer', 'lr-eresend-btn');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { if (err) { err.textContent = 'Please enter a valid email address.'; err.style.display = 'block'; } return; }
+    if (err) err.style.display = 'none';
+
+    var btn = document.getElementById('lr-send-email-otp-btn');
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.textContent = 'Sending OTP…'; }
+
+    apiCall('/api/send-otp', { type: 'email', value: em })
+      .then(function(data) {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Send OTP →'; }
+        if (data.error) { if (err) { err.textContent = data.error; err.style.display = 'block'; } return; }
+        document.getElementById('lr-step-email').style.display = 'none';
+        var msg = document.getElementById('lr-email-otp-msg');
+        if (msg) msg.innerHTML = 'OTP sent to <strong>' + em + '</strong><br><span style="font-size:.68rem;color:#3d6b5e;">Check your inbox (and spam folder) for the 6-digit code</span>';
+        document.getElementById('lr-step-email-otp').style.display = 'block';
+        clearOTPBoxes('lr-eotp-box');
+        var boxes = document.querySelectorAll('.lr-eotp-box');
+        if (boxes[0]) setTimeout(function(){ boxes[0].focus(); }, 100);
+        startResendTimer('lr-eresend-timer', 'lr-eresend-btn');
+      })
+      .catch(function() {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Send OTP →'; }
+        if (err) { err.textContent = 'Network error. Please try again.'; err.style.display = 'block'; }
+      });
+  };
+
+  /* ── resend OTP (email) ── */
+  window.lrResendEmailOTP = function() {
+    var em = ((document.getElementById('lr-email')||{}).value||'').trim();
+    var resendBtn = document.getElementById('lr-eresend-btn');
+    var otpErr    = document.getElementById('lr-eotp-err');
+    if (resendBtn) { resendBtn.disabled = true; resendBtn.textContent = 'Sending…'; }
+
+    apiCall('/api/send-otp', { type: 'email', value: em })
+      .then(function(data) {
+        if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
+        if (data.error) { if (otpErr) { otpErr.textContent = data.error; otpErr.style.display = 'block'; } return; }
+        clearOTPBoxes('lr-eotp-box');
+        if (otpErr) otpErr.style.display = 'none';
+        resendBtn.style.display = 'none';
+        startResendTimer('lr-eresend-timer', 'lr-eresend-btn');
+      })
+      .catch(function() {
+        if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Resend OTP'; }
+        if (otpErr) { otpErr.textContent = 'Network error. Please try again.'; otpErr.style.display = 'block'; }
+      });
   };
 
   /* ── back to email input ── */
@@ -4777,19 +4865,50 @@
     clearInterval(_resendT);
   };
 
-  /* ── verify OTP (email) ── */
+  /* ── verify OTP (email) — calls real backend ── */
   window.lrVerifyEmailOTP = function() {
     var entered = getOTPValue('lr-eotp-box');
     var err = document.getElementById('lr-eotp-err');
+    var em  = ((document.getElementById('lr-email')||{}).value||'').trim();
     if (entered.length < 6) { showErr(err, 'Please enter all 6 digits.'); return; }
-    if (entered !== _otp) { showErr(err, 'Incorrect OTP. Please try again.'); shakBoxes('lr-eotp-box'); return; }
-    err.style.display = 'none';
-    clearInterval(_resendT);
-    showSuccess(
-      'Signed in successfully! 🎉',
-      'Welcome to AI Champ. You\'re now logged in with ' + (document.getElementById('lr-email')||{}).value
-    );
+    if (err) err.style.display = 'none';
+
+    var btn = document.getElementById('lr-email-verify-btn');
+    if (btn) { btn.disabled = true; btn.style.opacity = '0.7'; btn.textContent = 'Verifying…'; }
+
+    apiCall('/api/verify-otp', { type: 'email', value: em, otp: entered })
+      .then(function(data) {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Verify &amp; Sign In ✓'; }
+        if (data.error) { showErr(err, data.error); shakBoxes('lr-eotp-box'); return; }
+        clearInterval(_resendT);
+        showSuccess(
+          'Signed in successfully! 🎉',
+          'Welcome to AI Champ. You\'re now logged in as ' + em
+        );
+        updateNavToLoggedIn(data.user);
+      })
+      .catch(function() {
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; btn.innerHTML = 'Verify &amp; Sign In ✓'; }
+        showErr(err, 'Network error. Please try again.');
+      });
   };
+
+  /* ── update nav button when logged in ── */
+  function updateNavToLoggedIn(user) {
+    var btn = document.getElementById('login-btn');
+    if (btn) {
+      btn.innerHTML = '<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.1" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z" stroke-linecap="round" stroke-linejoin="round"/></svg> My Account';
+      btn.onclick = function() { openLoginModal(); };
+    }
+  }
+
+  /* ── check session on page load ── */
+  fetch('/api/session', { credentials: 'same-origin' })
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.loggedIn) updateNavToLoggedIn(data.user);
+    })
+    .catch(function(){});
 
   /* ── OTP box helpers ── */
   window.lrOtpInput = function(el, idx) {
@@ -4875,7 +4994,6 @@
     }
   }
   function lrReset() {
-    _otp = '';
     clearInterval(_resendT);
     ['lr-step-otp','lr-step-email','lr-step-email-otp','lr-step-success'].forEach(function(id){
       var el = document.getElementById(id); if (el) el.style.display = 'none';
@@ -6263,6 +6381,176 @@ function mobileNavClose() {
   document.body.style.overflow = '';
 }
 </script>
+
+<!-- ── Service Worker registration (PWA) ── -->
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js')
+      .catch(function() {}); // fail silently in dev
+  });
+}
+</script>
+
+
+<!-- ═══════════════════════════════════════════════
+     ANNOUNCEMENT POPUP — auto on first load, session-once
+     Zero impact on existing page content/layout.
+════════════════════════════════════════════════ -->
+<style>
+  @keyframes ann-spiral-in {
+    0%   { opacity:0; transform:scale(0.04) rotate(-300deg); }
+    60%  { opacity:1; transform:scale(1.07) rotate(8deg); }
+    78%  { transform:scale(0.96) rotate(-3deg); }
+    90%  { transform:scale(1.02) rotate(1deg); }
+    100% { opacity:1; transform:scale(1) rotate(0deg); }
+  }
+  @keyframes ann-spiral-out {
+    0%   { opacity:1; transform:scale(1) rotate(0deg); }
+    30%  { transform:scale(1.06) rotate(-6deg); }
+    100% { opacity:0; transform:scale(0.04) rotate(300deg); }
+  }
+  @keyframes ann-backdrop-fade-in  { from{opacity:0;} to{opacity:1;} }
+  @keyframes ann-backdrop-fade-out { from{opacity:1;} to{opacity:0;pointer-events:none;} }
+  @keyframes ann-float {
+    0%,100% { transform:translateY(0px); }
+    50%      { transform:translateY(-5px); }
+  }
+  @keyframes ann-star-orbit {
+    0%   { transform:rotate(0deg)   scale(1);    opacity:1; }
+    50%  { transform:rotate(180deg) scale(1.35); opacity:.3; }
+    100% { transform:rotate(360deg) scale(1);    opacity:1; }
+  }
+  @keyframes ann-glow-ring {
+    0%,100% { box-shadow:0 0 0 3px rgba(210,14,7,.08), 0 24px 60px rgba(0,0,0,.5), 0 0 32px rgba(210,14,7,.18); }
+    50%      { box-shadow:0 0 0 6px rgba(45,5,226,.1),  0 24px 60px rgba(0,0,0,.5), 0 0 48px rgba(210,14,7,.30); }
+  }
+
+  #ann-backdrop {
+    position:fixed; inset:0; z-index:99990;
+    background:rgba(0,0,0,.58);
+    backdrop-filter:blur(5px);
+    -webkit-backdrop-filter:blur(5px);
+    display:flex; align-items:center; justify-content:center;
+    animation:ann-backdrop-fade-in .3s ease both;
+  }
+  #ann-backdrop.ann-out {
+    animation:ann-backdrop-fade-out .42s ease forwards;
+    pointer-events:none;
+  }
+
+  #ann-box {
+    position:relative;
+    background:linear-gradient(148deg,#ffffff 0%,#f0fdf9 45%,#fff5f5 100%);
+    border:2px solid rgba(210,14,7,.32);
+    border-radius:22px;
+    width:min(310px,86vw);
+    padding:1.6rem 1.3rem 1.2rem;
+    text-align:center;
+    animation:ann-spiral-in .8s cubic-bezier(.16,1,.3,1) both, ann-glow-ring 2.8s ease-in-out 1s infinite;
+  }
+  #ann-box.ann-out {
+    animation:ann-spiral-out .42s cubic-bezier(.55,0,.9,.5) forwards;
+  }
+
+  /* Stars — absolutely placed around box */
+  .ann-s {
+    position:absolute;
+    line-height:1;
+    pointer-events:none;
+    display:inline-block;
+  }
+
+  #ann-close-btn {
+    position:absolute; top:.55rem; right:.55rem;
+    width:24px; height:24px; border-radius:50%;
+    background:rgba(210,14,7,.1);
+    border:1px solid rgba(210,14,7,.28);
+    color:#D20E07; font-size:.78rem; font-weight:900;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:background .18s ease, transform .18s ease;
+    z-index:2;
+  }
+  #ann-close-btn:hover { background:#D20E07; color:#fff; transform:scale(1.12) rotate(90deg); }
+</style>
+
+<div id="ann-backdrop">
+  <div id="ann-box">
+
+    <!-- ✕ close -->
+    <button id="ann-close-btn" onclick="annClose()" aria-label="Close announcement">✕</button>
+
+    <!-- Blinking stars around the oval -->
+    <span class="ann-s" style="top:-1rem;left:-.8rem;font-size:1.1rem;animation:ann-star-orbit 1.7s linear infinite;">⭐</span>
+    <span class="ann-s" style="top:-1rem;right:-.8rem;font-size:1rem;animation:ann-star-orbit 1.7s linear infinite;animation-delay:.43s;">🌟</span>
+    <span class="ann-s" style="bottom:-1rem;left:-.8rem;font-size:1rem;animation:ann-star-orbit 1.7s linear infinite;animation-delay:.86s;">⭐</span>
+    <span class="ann-s" style="bottom:-1rem;right:-.8rem;font-size:1.1rem;animation:ann-star-orbit 1.7s linear infinite;animation-delay:1.28s;">🌟</span>
+    <span class="ann-s" style="top:-.9rem;left:50%;margin-left:-10px;font-size:.95rem;animation:ann-star-orbit 2.1s linear infinite;animation-delay:.2s;">✨</span>
+    <span class="ann-s" style="bottom:-.9rem;left:50%;margin-left:-10px;font-size:.95rem;animation:ann-star-orbit 2.1s linear infinite;animation-delay:1.05s;">✨</span>
+    <span class="ann-s" style="top:40%;left:-1.05rem;font-size:.85rem;animation:ann-star-orbit 2.4s linear infinite;animation-delay:.65s;">⭐</span>
+    <span class="ann-s" style="top:40%;right:-1.05rem;font-size:.85rem;animation:ann-star-orbit 2.4s linear infinite;animation-delay:1.5s;">🌟</span>
+
+    <!-- Announcement emojis row -->
+    <div style="font-size:1.45rem;letter-spacing:.15em;margin-bottom:.55rem;animation:ann-float 2.6s ease-in-out infinite;">📣 🎉 📣</div>
+
+    <!-- Live pill -->
+    <div style="display:inline-flex;align-items:center;gap:.32rem;background:rgba(210,14,7,.1);border:1px solid rgba(210,14,7,.28);border-radius:100px;padding:.18rem .65rem;margin-bottom:.7rem;">
+      <span style="width:5px;height:5px;border-radius:50%;background:#D20E07;display:inline-block;animation:dot-pulse 1.8s ease-in-out infinite;"></span>
+      <span style="font-family:'Montserrat',sans-serif;font-size:.52rem;font-weight:800;color:#D20E07;letter-spacing:.16em;text-transform:uppercase;">Live Announcement</span>
+    </div>
+
+    <!-- Headline -->
+    <div style="font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:900;color:#0d2520;letter-spacing:-.015em;line-height:1.3;margin-bottom:.5rem;animation:ann-float 3.2s ease-in-out infinite;animation-delay:.5s;">
+      AI Champ Live Workshop
+    </div>
+
+    <!-- Details -->
+    <div style="font-family:'Open Sans',sans-serif;font-size:.72rem;color:#3d6b5e;line-height:1.65;margin-bottom:.65rem;">
+      on <strong style="color:#D20E07;font-family:'Montserrat',sans-serif;">May — 2nd &amp; 3rd weekends</strong><br>
+      📍 <strong style="color:#0d2520;">Orchids International School</strong>
+    </div>
+
+    <!-- Hurry up blink -->
+    <div style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:900;color:#D20E07;letter-spacing:.05em;margin-bottom:.9rem;animation:eb-urgency-blink 1.1s step-start infinite;">
+      🔥 Hurry Up! &nbsp;Limited Seats!
+    </div>
+
+    <!-- CTA -->
+    <button onclick="annClose();openModal('m-claim');"
+      style="font-family:'Montserrat',sans-serif;font-size:.68rem;font-weight:900;color:#fff;background:linear-gradient(135deg,#D20E07 0%,#a80b05 100%);border:none;border-radius:100px;padding:.48rem 1.35rem;cursor:pointer;box-shadow:0 6px 20px rgba(210,14,7,.38);transition:transform .18s ease,box-shadow .18s ease;letter-spacing:.04em;"
+      onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 10px 28px rgba(210,14,7,.48)'"
+      onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 6px 20px rgba(210,14,7,.38)'">
+      Claim Your Spot →
+    </button>
+
+    <!-- Dismiss hint -->
+    <div style="font-family:'Open Sans',sans-serif;font-size:.52rem;color:rgba(13,37,32,.38);margin-top:.65rem;">
+      Tap ✕ to close &amp; explore the website
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  /* Show once per browser session */
+  if (sessionStorage.getItem('aicAnnClosed')) {
+    var bd = document.getElementById('ann-backdrop');
+    if (bd) bd.style.display = 'none';
+  }
+})();
+
+function annClose() {
+  var bd  = document.getElementById('ann-backdrop');
+  var box = document.getElementById('ann-box');
+  if (!bd) return;
+  box.classList.add('ann-out');
+  bd.classList.add('ann-out');
+  setTimeout(function(){ bd.style.display = 'none'; }, 420);
+  sessionStorage.setItem('aicAnnClosed', '1');
+}
+</script>
+<!-- ═══ /ANNOUNCEMENT POPUP ═══ -->
 
 </body>
 </html>

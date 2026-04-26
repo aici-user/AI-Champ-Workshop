@@ -1,0 +1,17 @@
+{
+  "name": "ai-champ-website",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AI Champ EduTech website with OTP authentication",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.14"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

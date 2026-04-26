@@ -5,3 +5,7 @@
 
 # Claude project instructions
 CLAUDE.md
+
+# Secret credentials — NEVER commit
+.env
+node_modules/

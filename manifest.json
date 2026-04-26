@@ -1,0 +1,35 @@
+{
+  "name": "AI Champ",
+  "short_name": "AI Champ",
+  "description": "India's Pioneering AI EdTech & Consulting Platform — Workshops, Certifications & Mentoring",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a1e16",
+  "theme_color": "#056b45",
+  "lang": "en-IN",
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "business"],
+  "screenshots": [],
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.aichamp.app",
+      "id": "com.aichamp.app"
+    }
+  ],
+  "prefer_related_applications": false
+}
