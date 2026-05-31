@@ -6530,7 +6530,7 @@ if ('serviceWorker' in navigator) {
   <div id="iip-box">
 
     <!-- Close button (on top of image) -->
-    <button id="iip-close" onclick="iipClose()" aria-label="Close">✕</button>
+    <button id="iip-close" aria-label="Close">✕</button>
 
     <!-- Corner stars -->
     <span class="iip-star" style="top:-.7rem;left:-.7rem;font-size:1.15rem;animation:iip-star-spin 1.8s linear infinite;">⭐</span>
@@ -6617,21 +6617,50 @@ if ('serviceWorker' in navigator) {
 </audio>
 
 <script>
-/* ── IIP July 2026 Popup ──────────────────────────────── */
-(function(){
+/* ── IIP July 2026 Popup ──────────────────────────────────────────── */
 
+/* Single authoritative close function — called from button & backdrop */
+window.iipClose = function() {
+  /* 1. Stop audio immediately */
+  var snd = document.getElementById('iip-audio');
+  if (snd) { try { snd.pause(); snd.currentTime = 0; } catch(e){} }
+
+  /* 2. Hide backdrop immediately */
+  var bd = document.getElementById('iip-bd');
+  if (bd) bd.style.display = 'none';
+
+  /* 3. Remember for this session */
+  try { sessionStorage.setItem('iipPopupClosed', '1'); } catch(e){}
+};
+
+(function(){
   var bd  = document.getElementById('iip-bd');
   var snd = document.getElementById('iip-audio');
   if (!bd) return;
 
-  /* Already closed this session — hide immediately */
-  if (sessionStorage.getItem('iipPopupClosed')) {
-    bd.style.display = 'none';
-    return;
+  /* Already closed this session — hide and bail */
+  try {
+    if (sessionStorage.getItem('iipPopupClosed')) {
+      bd.style.display = 'none';
+      return;
+    }
+  } catch(e){}
+
+  /* Wire close button with stopPropagation so it never bubbles */
+  var closeBtn = document.getElementById('iip-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      window.iipClose();
+    });
   }
 
-  /* Play audio — browsers require a user gesture first;
-     we attempt immediately and fall back to first-interaction. */
+  /* Clicking the dark backdrop also closes */
+  bd.addEventListener('click', function(e) {
+    if (e.target === bd) window.iipClose();
+  });
+
+  /* Audio: try immediately, retry on first interaction */
   function tryPlay() {
     if (!snd) return;
     snd.volume = 0.72;
@@ -6639,41 +6668,20 @@ if ('serviceWorker' in navigator) {
     if (p && p.catch) p.catch(function(){});
   }
 
-  /* Attempt on load; if blocked, retry on first touch/click/key */
   tryPlay();
-  function onFirstInteraction() {
+
+  /* Retry once on first user touch/key (autoplay policy) */
+  var _played = false;
+  function onGesture() {
+    if (_played) return;
+    _played = true;
     tryPlay();
-    document.removeEventListener('click',    onFirstInteraction);
-    document.removeEventListener('touchend', onFirstInteraction);
-    document.removeEventListener('keydown',  onFirstInteraction);
   }
-  document.addEventListener('click',    onFirstInteraction, { once:true });
-  document.addEventListener('touchend', onFirstInteraction, { once:true });
-  document.addEventListener('keydown',  onFirstInteraction, { once:true });
+  document.addEventListener('click',    onGesture, { once: true, capture: true });
+  document.addEventListener('touchend', onGesture, { once: true, capture: true });
+  document.addEventListener('keydown',  onGesture, { once: true, capture: true });
 
 })();
-
-window.iipClose = function() {
-  /* Fade audio out smoothly over ~400 ms then pause */
-  var snd = document.getElementById('iip-audio');
-  if (snd && !snd.paused) {
-    var vol = snd.volume;
-    var steps = 12;
-    var interval = setInterval(function() {
-      vol = Math.max(0, vol - (0.72 / steps));
-      snd.volume = vol;
-      if (vol <= 0) { clearInterval(interval); snd.pause(); snd.currentTime = 0; }
-    }, 35);
-  }
-
-  var bd  = document.getElementById('iip-bd');
-  var box = document.getElementById('iip-box');
-  if (!bd) return;
-  box.classList.add('iip-closing');
-  bd.classList.add('iip-closing');
-  setTimeout(function(){ bd.style.display = 'none'; }, 430);
-  sessionStorage.setItem('iipPopupClosed', '1');
-};
 </script>
 <!-- ═══ /IIP JULY 2026 POPUP ═══ -->
 
