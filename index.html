@@ -6612,84 +6612,60 @@ if ('serviceWorker' in navigator) {
   </div>
 </div>
 
+<audio id="iip-audio" loop preload="auto"
+  src="ElevenLabs_A_subtle_pop-up_sound_accompanying_a_friendly_voice_prompt__'You've_got_new_notifications!'.mp3">
+</audio>
+
 <script>
 /* ── IIP July 2026 Popup ──────────────────────────────── */
 (function(){
 
-  /* ── Soothing chime audio via Web Audio API ── */
-  var _iipAudio = null;
-  var _iipGain  = null;
-
-  function iipStartAudio() {
-    try {
-      var ctx  = new (window.AudioContext || window.webkitAudioContext)();
-      _iipGain = ctx.createGain();
-      _iipGain.gain.setValueAtTime(0, ctx.currentTime);
-      _iipGain.gain.linearRampToValueAtTime(0.13, ctx.currentTime + 1.2);
-      _iipGain.connect(ctx.destination);
-
-      /* Layer 1 — soft pad: two detuned sine waves */
-      [261.63, 329.63, 392.00, 523.25].forEach(function(freq, i) {
-        var osc = ctx.createOscillator();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, ctx.currentTime);
-        var g = ctx.createGain();
-        g.gain.setValueAtTime(0.22, ctx.currentTime);
-        osc.connect(g);
-        g.connect(_iipGain);
-        osc.start(ctx.currentTime + i * 0.12);
-      });
-
-      /* Layer 2 — gentle tremolo LFO */
-      var lfo = ctx.createOscillator();
-      lfo.type = 'sine';
-      lfo.frequency.setValueAtTime(0.55, ctx.currentTime);
-      var lfoGain = ctx.createGain();
-      lfoGain.gain.setValueAtTime(0.035, ctx.currentTime);
-      lfo.connect(lfoGain);
-      lfoGain.connect(_iipGain.gain);
-      lfo.start();
-
-      _iipAudio = ctx;
-    } catch(e) { /* AudioContext not available — fail silently */ }
-  }
-
-  function iipStopAudio() {
-    if (!_iipAudio || !_iipGain) return;
-    try {
-      _iipGain.gain.linearRampToValueAtTime(0, _iipAudio.currentTime + 0.55);
-      setTimeout(function(){ try{ _iipAudio.close(); }catch(e){} }, 600);
-    } catch(e) {}
-    _iipAudio = null;
-    _iipGain  = null;
-  }
-
-  /* ── Show / hide logic ── */
-  var bd = document.getElementById('iip-bd');
+  var bd  = document.getElementById('iip-bd');
+  var snd = document.getElementById('iip-audio');
   if (!bd) return;
 
+  /* Already closed this session — hide immediately */
   if (sessionStorage.getItem('iipPopupClosed')) {
     bd.style.display = 'none';
     return;
   }
 
-  /* Start audio after first user interaction (browser autoplay policy) */
-  function tryStartAudio() {
-    iipStartAudio();
-    document.removeEventListener('click',    tryStartAudio);
-    document.removeEventListener('touchend', tryStartAudio);
-    document.removeEventListener('keydown',  tryStartAudio);
+  /* Play audio — browsers require a user gesture first;
+     we attempt immediately and fall back to first-interaction. */
+  function tryPlay() {
+    if (!snd) return;
+    snd.volume = 0.72;
+    var p = snd.play();
+    if (p && p.catch) p.catch(function(){});
   }
-  document.addEventListener('click',    tryStartAudio, { once:true });
-  document.addEventListener('touchend', tryStartAudio, { once:true });
-  document.addEventListener('keydown',  tryStartAudio, { once:true });
-  /* Also try immediately (works if page was already interacted with) */
-  setTimeout(iipStartAudio, 400);
+
+  /* Attempt on load; if blocked, retry on first touch/click/key */
+  tryPlay();
+  function onFirstInteraction() {
+    tryPlay();
+    document.removeEventListener('click',    onFirstInteraction);
+    document.removeEventListener('touchend', onFirstInteraction);
+    document.removeEventListener('keydown',  onFirstInteraction);
+  }
+  document.addEventListener('click',    onFirstInteraction, { once:true });
+  document.addEventListener('touchend', onFirstInteraction, { once:true });
+  document.addEventListener('keydown',  onFirstInteraction, { once:true });
 
 })();
 
 window.iipClose = function() {
-  iipStopAudio();
+  /* Fade audio out smoothly over ~400 ms then pause */
+  var snd = document.getElementById('iip-audio');
+  if (snd && !snd.paused) {
+    var vol = snd.volume;
+    var steps = 12;
+    var interval = setInterval(function() {
+      vol = Math.max(0, vol - (0.72 / steps));
+      snd.volume = vol;
+      if (vol <= 0) { clearInterval(interval); snd.pause(); snd.currentTime = 0; }
+    }, 35);
+  }
+
   var bd  = document.getElementById('iip-bd');
   var box = document.getElementById('iip-box');
   if (!bd) return;
