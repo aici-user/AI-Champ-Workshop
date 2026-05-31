@@ -6618,68 +6618,71 @@ if ('serviceWorker' in navigator) {
 
 <script>
 /* ── IIP July 2026 Popup ──────────────────────────────────────────── */
-
-/* Single authoritative close function — called from button & backdrop */
-window.iipClose = function() {
-  /* 1. Stop audio immediately */
-  var snd = document.getElementById('iip-audio');
-  if (snd) { try { snd.pause(); snd.currentTime = 0; } catch(e){} }
-
-  /* 2. Hide backdrop immediately */
-  var bd = document.getElementById('iip-bd');
-  if (bd) bd.style.display = 'none';
-
-  /* 3. Remember for this session */
-  try { sessionStorage.setItem('iipPopupClosed', '1'); } catch(e){}
-};
-
 (function(){
-  var bd  = document.getElementById('iip-bd');
-  var snd = document.getElementById('iip-audio');
+
+  var bd       = document.getElementById('iip-bd');
+  var snd      = document.getElementById('iip-audio');
+  var closeBtn = document.getElementById('iip-close');
+
   if (!bd) return;
 
-  /* Already closed this session — hide and bail */
-  try {
-    if (sessionStorage.getItem('iipPopupClosed')) {
-      bd.style.display = 'none';
-      return;
-    }
-  } catch(e){}
+  /* ── Already dismissed this session — hide immediately ── */
+  try { if (sessionStorage.getItem('iipPopupClosed')) { bd.style.display='none'; return; } } catch(e){}
 
-  /* Wire close button with stopPropagation so it never bubbles */
-  var closeBtn = document.getElementById('iip-close');
+  /* ─────────────────────────────────────────────────────────
+     CLOSE — instant, no animation, no async
+  ───────────────────────────────────────────────────────── */
+  function doClose(e) {
+    if (e) { e.stopPropagation(); e.preventDefault(); }
+    /* Stop audio hard */
+    if (snd) { try { snd.pause(); snd.currentTime = 0; } catch(x){} }
+    /* Hide popup hard */
+    bd.style.cssText += ';display:none!important;';
+    try { sessionStorage.setItem('iipPopupClosed','1'); } catch(x){}
+  }
+
+  /* Close button */
   if (closeBtn) {
-    closeBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      window.iipClose();
+    closeBtn.addEventListener('click',     doClose, true);
+    closeBtn.addEventListener('touchend',  doClose, true);
+    closeBtn.addEventListener('mousedown', doClose, true);
+  }
+
+  /* Click on dark backdrop also closes */
+  bd.addEventListener('click', function(e){ if(e.target===bd) doClose(e); });
+
+  /* ─────────────────────────────────────────────────────────
+     AUDIO — plays as soon as any interaction hits the page.
+     Popup covers the whole screen so mousemove fires within
+     milliseconds of load — feels truly immediate.
+  ───────────────────────────────────────────────────────── */
+  var _audioStarted = false;
+  function startAudio() {
+    if (_audioStarted || !snd) return;
+    _audioStarted = true;
+    snd.volume = 0.80;
+    var p = snd.play();
+    if (p && p.catch) p.catch(function(){});
+    /* Remove all listeners once audio starts */
+    ['mousemove','touchstart','click','keydown','scroll'].forEach(function(ev){
+      document.removeEventListener(ev, startAudio, true);
     });
   }
 
-  /* Clicking the dark backdrop also closes */
-  bd.addEventListener('click', function(e) {
-    if (e.target === bd) window.iipClose();
+  /* Listen on every early-trigger event in capture phase */
+  ['mousemove','touchstart','click','keydown','scroll'].forEach(function(ev){
+    document.addEventListener(ev, startAudio, { capture:true, passive:true });
   });
 
-  /* Audio: try immediately, retry on first interaction */
-  function tryPlay() {
-    if (!snd) return;
-    snd.volume = 0.72;
-    var p = snd.play();
-    if (p && p.catch) p.catch(function(){});
-  }
-
-  tryPlay();
-
-  /* Retry once on first user touch/key (autoplay policy) */
-  var _played = false;
-  function onGesture() {
-    if (_played) return;
-    _played = true;
-    tryPlay();
-  }
-  document.addEventListener('click',    onGesture, { once: true, capture: true });
-  document.addEventListener('touchend', onGesture, { once: true, capture: true });
-  document.addEventListener('keydown',  onGesture, { once: true, capture: true });
+  /* Also attempt a direct play — succeeds on reload/back-nav
+     where browser already trusts the page */
+  try {
+    snd.volume = 0.80;
+    var attempt = snd.play();
+    if (attempt) {
+      attempt.then(function(){ _audioStarted = true; }).catch(function(){});
+    }
+  } catch(x){}
 
 })();
 </script>
